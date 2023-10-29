@@ -19,7 +19,6 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idA;
-   
     private Long accountN;
     private Long cbu;
     private String alias;
