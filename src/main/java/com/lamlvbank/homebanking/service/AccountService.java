@@ -13,8 +13,5 @@ public interface AccountService {
     public Account save(Account account);
 
     public boolean deleteById(Long idA);
-//findAññ
-//findbyid
-//save
-//deletebyid
+
 }
