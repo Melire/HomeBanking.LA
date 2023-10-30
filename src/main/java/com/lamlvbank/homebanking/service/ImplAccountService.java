@@ -33,12 +33,11 @@ public class ImplAccountService implements AccountService {
 
     @Override
     public boolean deleteById(Long idA) {
-        accountRepo.deleteById(idA);
-        if (accountRepo.existsById(idA)) {
-            return false;
-
+        if(accountRepo.existsById(idA)){
+            accountRepo.deleteById(idA);
+            return true;
         }
-        return true;
+        return false;
 
     }
 }
