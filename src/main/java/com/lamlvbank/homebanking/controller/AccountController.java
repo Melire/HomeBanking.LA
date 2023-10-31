@@ -3,6 +3,7 @@ package com.lamlvbank.homebanking.controller;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class AccountController {
     }
 
     @PostMapping
-    ResponseEntity<Account> save(@RequestBody Account account) {
+    ResponseEntity<Account> save(@Valid  @RequestBody Account account) {
 
         Account accSaved = accountServ.save(account);
         if (accSaved != null) {
