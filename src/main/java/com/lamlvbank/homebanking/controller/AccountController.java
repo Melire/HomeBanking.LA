@@ -34,7 +34,7 @@ public class AccountController {
     }
 
     @PostMapping
-    ResponseEntity<Account> save(@Valid  @RequestBody Account account) {
+    ResponseEntity<Account> save(@Valid @RequestBody Account account) {
 
         Account accSaved = accountServ.save(account);
         if (accSaved != null) {
