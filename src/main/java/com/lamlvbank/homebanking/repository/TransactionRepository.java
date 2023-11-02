@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-
+    boolean existsByTransN(long transN);
 }

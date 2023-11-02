@@ -2,7 +2,9 @@ package com.lamlvbank.homebanking.controller;
 
 import com.lamlvbank.homebanking.model.Transaction;
 import com.lamlvbank.homebanking.service.TransactionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +35,7 @@ public class TransactionController {
     }
 
     @PostMapping
-    ResponseEntity<Transaction> save(@RequestBody  Transaction transaction){
+    ResponseEntity<Transaction> save(/* @Valid */ @RequestBody Transaction transaction){
         Transaction transactionSaved = tS.save(transaction);
         if (transactionSaved != null){
             return ResponseEntity.status(HttpStatus.CREATED).body(transactionSaved);

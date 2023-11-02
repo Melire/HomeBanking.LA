@@ -25,8 +25,11 @@ public class IMPTransactionService implements TransactionService {
     }
 
     @Override
-    public Transaction save(Transaction tran) {
-        return tR.save(tran);
+    public Transaction save(Transaction trans) {
+        if(tR.existsByTransN(trans.getTransN())){
+            return null;
+        }
+        return tR.save(trans);
     }
 
     @Override
