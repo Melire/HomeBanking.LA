@@ -2,6 +2,7 @@ package com.lamlvbank.homebanking.controller;
 
 import com.lamlvbank.homebanking.model.AccountType;
 import com.lamlvbank.homebanking.service.AccountTypeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class AccountTypeController {
     }
 
     @PostMapping
-    ResponseEntity<AccountType> save(@RequestBody AccountType accountType) {
+    ResponseEntity<AccountType> save(@Valid @RequestBody AccountType accountType) {
         AccountType accTypeSaved = aTS.save(accountType);
         if (accTypeSaved!= null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(accTypeSaved);

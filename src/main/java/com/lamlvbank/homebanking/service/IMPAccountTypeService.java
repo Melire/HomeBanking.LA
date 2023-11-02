@@ -24,6 +24,9 @@ public class IMPAccountTypeService implements AccountTypeService {
 
     @Override
     public AccountType save(AccountType accType) {
+        if (accTR.existsByName(accType.getName())){
+            return null;
+        }
         return accTR.save(accType);
     }
 
