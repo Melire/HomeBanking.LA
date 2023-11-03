@@ -31,12 +31,15 @@ public class Account {
     private String cbu;
 
 
-    @NotNull @NotBlank
-    //@Pattern(regexp = "^[a-z]+\\\\.[a-z]+\\\\.[a-z]+$")//asigna el patron para el alias
-    @Column(unique = true,nullable = false)
+    @NotNull
+    @NotBlank
+    @Pattern(regexp = "^[a-z]+\\.[a-z]+\\.[a-z]+$", message = "Debe ser 3 palabras en minúsculas separadas por puntos")
+    @Column(unique = true, nullable = false)
     private String alias;
 
-    @NotNull @DecimalMin(value="0.0") @DecimalMax(value="20000000.0")
+    @NotNull
+    @DecimalMin(value = "0.0")
+    @DecimalMax(value = "20000000.0")
     private float balance;
 
 }
