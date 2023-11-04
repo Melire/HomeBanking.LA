@@ -48,7 +48,6 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
     }
-
     @DeleteMapping("{idU}")
     ResponseEntity<User> deleteById(@PathVariable("idU")Long idU){
         Optional<User> optUser = uS.findById(idU);
@@ -61,14 +60,11 @@ public class UserController {
     @DeleteMapping("dni/{dniU}")
     ResponseEntity<User> deleteByDni(@PathVariable("dniU")String dniU){
         Optional<User> optUser = uS.getUserByDni(dniU);
-        if (!optUser.isEmpty()) {
-            if (uS.deleteById(optUser.get().getIdU())) {
-                return ResponseEntity.ok(optUser.get());
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+        if (uS.deleteByDni(dniU)){
+            return ResponseEntity.ok(optUser.get());
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
     @PutMapping("{idU}")
     ResponseEntity<User> updateById(@Valid @RequestBody  User user, @PathVariable("idU")Long idU){

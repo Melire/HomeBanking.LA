@@ -45,5 +45,16 @@ public class IMPUserService implements UserService{
             }
             return false;
         }
+    @Override
+    public boolean deleteByDni(String dniU) {
+        if(userTR.existsByDni(dniU)) {
+          userTR.deleteByDni(dniU);
+          return true;
+        }
+        return false;
     }
+    public boolean updateById(Long idU){
+        return true;
+    }
+   }
 
