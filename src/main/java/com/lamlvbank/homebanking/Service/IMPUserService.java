@@ -39,10 +39,11 @@ public class IMPUserService implements UserService{
 
     @Override
     public boolean deleteById(Long idU) {
-        userTR.deleteById(idU);
-        if (userTR.existsById(idU)){
+        if (userTR.existsById(idU)) {
+            userTR.deleteById(idU);
+            return true;
+            }
             return false;
         }
-        return true;
     }
-}
+
