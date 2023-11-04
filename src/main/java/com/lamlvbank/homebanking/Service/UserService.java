@@ -12,4 +12,5 @@ public interface UserService {
     Optional<User> getUserByDni(String dniU);
     User save(User user);
     boolean deleteById(Long idU);
+
 }

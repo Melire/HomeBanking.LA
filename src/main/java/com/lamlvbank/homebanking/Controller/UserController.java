@@ -2,6 +2,7 @@ package com.lamlvbank.homebanking.Controller;
 
 import com.lamlvbank.homebanking.Model.User;
 import com.lamlvbank.homebanking.Service.UserService;
+import jakarta.persistence.PostUpdate;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,13 +50,47 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @DeleteMapping("deleteId/{idU}")
-    void deleteById(@PathVariable("idU")Long idU){
-        boolean userDeleted = uS.deleteById(idU);
+    /*
+    @DeleteMapping("{idU}")
+    ResponseEntity<User> deleteById(@PathVariable("idU")Long idU){
+        Optional<User> optUser = uS.findById(idU);
+        if (uS.deleteById(idU)){
+            return ResponseEntity.ok(optUser.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
-    @DeleteMapping("deleteDni/{dniU}")
-    void deleteByDni(@PathVariable("dniU")String dniU){
-        Optional<User> optUser=uS.getUserByDni(dniU);
-        boolean userDeleted = uS.deleteById(optUser.get().getIdU());
+    */
+
+    @DeleteMapping("{idU}")
+    ResponseEntity<User> deleteById(@PathVariable("idU")Long idU){
+        Optional<User> optUser = uS.findById(idU);
+        if (optUser.isPresent()){
+            boolean userDeleted = uS.deleteById(idU);
+            return ResponseEntity.ok(optUser.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
+    @DeleteMapping("dni/{dniU}")
+    ResponseEntity<User> deleteByDni(@PathVariable("dniU")String dniU){
+        Optional<User> optUser = uS.getUserByDni(dniU);
+        if (optUser.isPresent()){
+            boolean userDeleted = uS.deleteById(optUser.get().getIdU());
+            return ResponseEntity.ok(optUser.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @PutMapping("{idU}")
+    ResponseEntity<User> updateById(@Valid @RequestBody  User user, @PathVariable("idU")Long idU){
+         user.setIdU(idU);
+         User userSaved = uS.save(user);
+        if (userSaved !=null){
+                return ResponseEntity.status(HttpStatus.CREATED).body(userSaved);
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        }
 }
