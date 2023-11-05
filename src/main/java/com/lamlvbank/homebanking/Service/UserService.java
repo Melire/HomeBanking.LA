@@ -13,5 +13,5 @@ public interface UserService {
     User save(User user);
     boolean deleteById(Long idU);
     boolean deleteByDni(String dniU);
-    boolean updateById(Long idU);
+    boolean updateById(User user);
 }

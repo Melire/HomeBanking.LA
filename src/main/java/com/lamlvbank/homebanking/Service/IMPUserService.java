@@ -17,8 +17,10 @@ public class IMPUserService implements UserService{
     }
 
     public User getUserById(Long idU){
-        User user = userTR.findById(idU).get();
-        return user;
+        if(userTR.findById(idU).isPresent()){
+            return userTR.findById(idU).get();
+        }
+        return null;
     }
     @Override
     public Optional<User> getUserByDni(String dniU){
@@ -53,8 +55,13 @@ public class IMPUserService implements UserService{
         }
         return false;
     }
-    public boolean updateById(Long idU){
-        return true;
+    public boolean updateById(User user){
+       if(userTR.existsById(user.getIdU())){
+            userTR.save(user);
+            return true;
+        }
+        return false;
     }
+
    }
 

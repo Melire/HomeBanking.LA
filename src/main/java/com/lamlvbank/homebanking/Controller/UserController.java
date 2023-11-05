@@ -66,12 +66,10 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-    @PutMapping("{idU}")
-    ResponseEntity<User> updateById(@Valid @RequestBody  User user, @PathVariable("idU")Long idU){
-         user.setIdU(idU);
-         User userSaved = uS.save(user);
-        if (userSaved !=null){
-                return ResponseEntity.status(HttpStatus.CREATED).body(userSaved);
+    @PutMapping()
+    ResponseEntity<User> updateById(@Valid @RequestBody  User user){
+            if (uS.updateById(user)){
+                return ResponseEntity.status(HttpStatus.CREATED).body(user);
             } else {
                 return ResponseEntity.badRequest().build();
             }
