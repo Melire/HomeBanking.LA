@@ -10,8 +10,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByDni(String dni);
-    Optional<User> getUserByDni(String dni);
-    @Transactional
-    @Modifying
+    Optional<User> findByDni(String dni);
     void deleteByDni(String dni);
 }

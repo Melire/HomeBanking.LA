@@ -7,11 +7,11 @@ import java.util.Optional;
 public interface UserService {
 
     List<User> findAll();
-    User getUserById(Long idU);
     Optional<User> findById(Long idU);
-    Optional<User> getUserByDni(String dniU);
+    Optional<User> findByDni(String dniU);
     User save(User user);
+    User update(User user);
     boolean deleteById(Long idU);
     boolean deleteByDni(String dniU);
-    boolean updateById(User user);
+
 }

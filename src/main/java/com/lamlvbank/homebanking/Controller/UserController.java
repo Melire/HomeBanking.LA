@@ -20,7 +20,7 @@ public class UserController {
     ResponseEntity<List<User>> findAll() {
       return ResponseEntity.ok(uS.findAll());
     }
-    @GetMapping("{idU}")
+    @GetMapping("/{idU}")
     ResponseEntity<User> findById(@PathVariable("idU")Long idU){
         Optional<User> optUser=uS.findById(idU);
           if (optUser.isPresent()){
@@ -30,9 +30,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("dni/{dniU}")
+    @GetMapping("/dni/{dniU}")
     ResponseEntity<User> findBydni(@PathVariable("dniU")String dniU){
-        Optional<User> optUser=uS.getUserByDni(dniU);
+        Optional<User> optUser=uS.findByDni(dniU);
         if (optUser.isPresent()){
             return ResponseEntity.ok(optUser.get());
         } else {
@@ -48,30 +48,29 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @DeleteMapping("{idU}")
-    ResponseEntity<User> deleteById(@PathVariable("idU")Long idU){
-        Optional<User> optUser = uS.findById(idU);
+    @DeleteMapping("/{idU}")
+    ResponseEntity<?> deleteById(@PathVariable("idU")Long idU){
         if (uS.deleteById(idU)){
-            return ResponseEntity.ok(optUser.get());
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-    @DeleteMapping("dni/{dniU}")
-    ResponseEntity<User> deleteByDni(@PathVariable("dniU")String dniU){
-        Optional<User> optUser = uS.getUserByDni(dniU);
+    @DeleteMapping("/dni/{dniU}")
+    ResponseEntity<?> deleteByDni(@PathVariable("dniU")String dniU){
         if (uS.deleteByDni(dniU)){
-            return ResponseEntity.ok(optUser.get());
+            return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }
     }
     @PutMapping()
-    ResponseEntity<User> updateById(@Valid @RequestBody  User user){
-            if (uS.updateById(user)){
-                return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    ResponseEntity<User> update(@Valid @RequestBody  User user){
+            User userUpdated = uS.update(user);
+        if (!userUpdated.equals(user)){
+                return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
             } else {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(user);
             }
         }
 }
