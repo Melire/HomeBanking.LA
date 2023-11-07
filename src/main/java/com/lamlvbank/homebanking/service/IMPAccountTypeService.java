@@ -29,6 +29,14 @@ public class IMPAccountTypeService implements AccountTypeService {
         }
         return accTR.save(accType);
     }
+    @Override
+    public AccountType update(AccountType accType) {
+        if (accTR.existsById(accType.getIdAT())){
+            return accTR.save(accType);
+        }
+        accType.setIdAT(0L);
+        return accType;
+    }
 
     @Override
     public boolean deleteById(Long idAt) {
