@@ -33,6 +33,16 @@ public class IMPTransactionService implements TransactionService {
     }
 
     @Override
+    public Transaction update(Transaction tran) {
+        Optional<Transaction>optTransaction=tR.findByTransN(tran.getTransN());
+        if(optTransaction.isPresent()){
+            optTransaction.get().setAmount(tran.getAmount());
+            return tR.save(optTransaction.get());  //retorna la entidad actualizada
+        }
+        return tran; //si no hay cambios entonces retorna nuevamente lo anterior. lo que viene en el json.
+    }
+
+    @Override
     public boolean deleteById(Long idT) {
         if(tR.existsById(idT)){
             tR.deleteById(idT);

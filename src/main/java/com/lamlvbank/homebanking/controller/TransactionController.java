@@ -4,7 +4,6 @@ import com.lamlvbank.homebanking.model.Transaction;
 import com.lamlvbank.homebanking.service.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/apiHB/transactions")
-
 public class TransactionController {
     @Autowired
     private TransactionService tS;
@@ -35,14 +33,23 @@ public class TransactionController {
     }
 
     @PostMapping
-    ResponseEntity<Transaction> save(/* @Valid */ @RequestBody Transaction transaction){
+    ResponseEntity<Transaction> save(@Valid @RequestBody Transaction transaction){
         Transaction transactionSaved = tS.save(transaction);
         if (transactionSaved != null){
             return ResponseEntity.status(HttpStatus.CREATED).body(transactionSaved);
         } else {
             return ResponseEntity.badRequest().build();
         }
+    }
 
+    @PutMapping
+    ResponseEntity<Transaction> update(@Valid @RequestBody Transaction transaction){
+        Transaction transactionUpdated = tS.update(transaction);
+        if (transactionUpdated.getIdT() != null){
+            return ResponseEntity.ok(transactionUpdated);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping("/{idT}")
@@ -53,5 +60,4 @@ public class TransactionController {
             return ResponseEntity.notFound().build();
         }
     }
-
 }
