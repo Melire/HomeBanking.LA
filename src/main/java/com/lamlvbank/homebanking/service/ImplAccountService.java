@@ -27,14 +27,13 @@ public class ImplAccountService implements AccountService {
 
     @Override
     public Account save(Account account) {
-        if(!(accountRepo.existsByAccountN(account.getAccountN())) && !(accountRepo.existsByAlias(account.getAlias()))
-                && !(accountRepo.existsByCbu(account.getCbu())))  {
-             return accountRepo.save(account);
+        if (!(accountRepo.existsByAccountN(account.getAccountN())) && !(accountRepo.existsByAlias(account.getAlias()))
+                && !(accountRepo.existsByCbu(account.getCbu()))) {
+            return accountRepo.save(account);
         } else {
-           return null;
+            return null;
         }
     }
-
 
     @Override
     public boolean deleteById(Long idA) {
@@ -46,4 +45,19 @@ public class ImplAccountService implements AccountService {
 
     }
 
+    @Override
+    public Account update(Account account) {
+        Optional<Account> accountToUpdate = accountRepo.findByAccountN(account.getAccountN());
+        if (accountToUpdate.isPresent()) {
+
+            accountToUpdate.get().setAlias(account.getAlias());
+            accountToUpdate.get().setBalance(account.getBalance());
+
+            Account accountUpdated = accountRepo.save(accountToUpdate.get());
+            return accountUpdated;
+        }
+        return account;
+    }
+//Validar que el cbu y al numero de cuenta pertenezca a la misma entidad
 }
+

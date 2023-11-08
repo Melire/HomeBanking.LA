@@ -10,8 +10,8 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
 @Entity
 public class Account {
     @Id
@@ -42,4 +42,47 @@ public class Account {
     @DecimalMax(value = "20000000.0")
     private float balance;
 
+
+    //GETTERS Y SETTERS
+
+
+//    public Long getIdA() {
+//        return idA;
+//    }
+//
+//    public void setIdA(Long idA) {
+//        this.idA = idA;
+//    }
+//
+//    public String getAccountN() {
+//        return accountN;
+//    }
+//
+//    public void setAccountN(String accountN) {
+//        this.accountN = accountN;
+//    }
+//
+//    public String getCbu() {
+//        return cbu;
+//    }
+//
+//    public void setCbu(String cbu) {
+//        this.cbu = cbu;
+//    }
+//
+//    public String getAlias() {
+//        return alias;
+//    }
+//
+//    public void setAlias(String alias) {
+//        this.alias = alias;
+//    }
+//
+//    public float getBalance() {
+//        return balance;
+//    }
+//
+//    public void setBalance(float balance) {
+//        this.balance = balance;
+//    }
 }
