@@ -42,8 +42,10 @@ public class AccountTypeController {
         }
 
     }
+
     @PutMapping ("/{idAT}")
-    ResponseEntity<AccountType> update(@Valid @RequestBody AccountType accountType,@PathVariable("idAT") Long idAT) {
+    ResponseEntity<AccountType> update(@Valid @RequestBody AccountType accountType
+                                        ,@PathVariable("idAT") Long idAT) {
         accountType.setIdAT(idAT);
         AccountType accTypeUpdated = aTS.update(accountType);
         if (accTypeUpdated.getIdAT()!=0) {
@@ -52,6 +54,7 @@ public class AccountTypeController {
             return ResponseEntity.badRequest().build();
         }
     }
+
     @DeleteMapping ("/{idAT}")
     ResponseEntity<?> deleteById (@PathVariable("idAT") Long idAT){
         if (aTS.deleteById(idAT)){
@@ -59,6 +62,5 @@ public class AccountTypeController {
         }else{
             return ResponseEntity.notFound().build();
         }
-
     }
 }
