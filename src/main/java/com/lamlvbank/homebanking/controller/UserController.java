@@ -1,7 +1,7 @@
-package com.lamlvbank.homebanking.Controller;
+package com.lamlvbank.homebanking.controller;
 
-import com.lamlvbank.homebanking.Model.User;
-import com.lamlvbank.homebanking.Service.UserService;
+import com.lamlvbank.homebanking.model.User;
+import com.lamlvbank.homebanking.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

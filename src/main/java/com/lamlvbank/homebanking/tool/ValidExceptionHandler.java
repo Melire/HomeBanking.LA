@@ -1,4 +1,4 @@
-package com.lamlvbank.homebanking.Tool;
+package com.lamlvbank.homebanking.tool;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

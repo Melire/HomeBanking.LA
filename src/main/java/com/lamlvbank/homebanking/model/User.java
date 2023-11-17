@@ -1,10 +1,9 @@
-package com.lamlvbank.homebanking.Model;
+package com.lamlvbank.homebanking.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 

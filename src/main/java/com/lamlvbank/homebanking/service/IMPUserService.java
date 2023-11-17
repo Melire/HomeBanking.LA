@@ -1,7 +1,7 @@
-package com.lamlvbank.homebanking.Service;
+package com.lamlvbank.homebanking.service;
 
-import com.lamlvbank.homebanking.Model.User;
-import com.lamlvbank.homebanking.Repository.UserRepository;
+import com.lamlvbank.homebanking.model.User;
+import com.lamlvbank.homebanking.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

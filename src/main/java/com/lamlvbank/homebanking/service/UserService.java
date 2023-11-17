@@ -1,6 +1,6 @@
-package com.lamlvbank.homebanking.Service;
+package com.lamlvbank.homebanking.service;
 
-import com.lamlvbank.homebanking.Model.User;
+import com.lamlvbank.homebanking.model.User;
 import java.util.List;
 import java.util.Optional;
 
