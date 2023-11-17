@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CurrencyRepository extends JpaRepository<Currency, Long> {
+    boolean existsByName(String name);
 }
