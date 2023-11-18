@@ -33,7 +33,7 @@ public class AccountController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    
     //CREATE ACCOUNT
     @PostMapping
     ResponseEntity<Account> save(@Valid @RequestBody Account account) {
@@ -45,7 +45,6 @@ public class AccountController {
         }
 
     }
-
     //UPDATE ACCOUNT
     @PutMapping
     ResponseEntity<Account> update(@Valid @RequestBody Account account) {
@@ -66,6 +65,4 @@ public class AccountController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 }
