@@ -1,6 +1,10 @@
 package com.lamlvbank.homebanking.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -13,6 +17,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "idA")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +47,15 @@ public class Account {
     @DecimalMax(value = "20000000.0")
     private float balance;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    //@JsonManagedReference
+    private User user;
+
+    public void addUser(Long idU){
+        User userAdd = new User();
+        userAdd.setIdU(idU);
+        this.setUser(userAdd);
+    }
 
     //GETTERS Y SETTERS
 

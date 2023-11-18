@@ -1,6 +1,7 @@
 package com.lamlvbank.homebanking.controller;
 
 import com.lamlvbank.homebanking.model.Account;
+import com.lamlvbank.homebanking.model.User;
 import com.lamlvbank.homebanking.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,14 @@ public class AccountController {
     }
 
     //CREATE ACCOUNT
-    @PostMapping
-    ResponseEntity<Account> save(@Valid @RequestBody Account account) {
+    @PostMapping("/{idU}")
+    ResponseEntity<Account> save(@Valid @RequestBody Account account, @PathVariable("idU") Long idU) {
+        /*
+        User userToSaved = new User();
+        userToSaved.setIdU(idU);
+        account.setUser(userToSaved);
+        */
+        account.addUser(idU);
         Account accSaved = accountServ.save(account);
         if (accSaved != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(accSaved);

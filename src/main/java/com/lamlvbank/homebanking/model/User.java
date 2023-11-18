@@ -1,11 +1,16 @@
 package com.lamlvbank.homebanking.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,6 +18,7 @@ import java.time.LocalDate;
 @Setter
 @EqualsAndHashCode
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "idU")
 public class User {
  @Id
  @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +40,9 @@ public class User {
  @NonNull
  @Column(nullable = false)
  private LocalDate birthdate;
+
+ @OneToMany(mappedBy = "user")
+ //@JsonBackReference
+ private List<Account> accounts;
+
 }
