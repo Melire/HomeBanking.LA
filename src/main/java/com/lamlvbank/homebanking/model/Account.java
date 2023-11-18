@@ -1,6 +1,5 @@
 package com.lamlvbank.homebanking.model;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -30,7 +29,6 @@ public class Account {
     @Column(unique = true, nullable = false)
     private String cbu;
 
-
     @NotNull
     @NotBlank
     @Pattern(regexp = "^[a-z]+\\.[a-z]+\\.[a-z]+$", message = "Debe ser 3 palabras en minúsculas separadas por puntos")
@@ -42,47 +40,45 @@ public class Account {
     @DecimalMax(value = "20000000.0")
     private float balance;
 
+    // GETTERS Y SETTERS
 
-    //GETTERS Y SETTERS
-
-
-//    public Long getIdA() {
-//        return idA;
-//    }
-//
-//    public void setIdA(Long idA) {
-//        this.idA = idA;
-//    }
-//
-//    public String getAccountN() {
-//        return accountN;
-//    }
-//
-//    public void setAccountN(String accountN) {
-//        this.accountN = accountN;
-//    }
-//
-//    public String getCbu() {
-//        return cbu;
-//    }
-//
-//    public void setCbu(String cbu) {
-//        this.cbu = cbu;
-//    }
-//
-//    public String getAlias() {
-//        return alias;
-//    }
-//
-//    public void setAlias(String alias) {
-//        this.alias = alias;
-//    }
-//
-//    public float getBalance() {
-//        return balance;
-//    }
-//
-//    public void setBalance(float balance) {
-//        this.balance = balance;
-//    }
+    // public Long getIdA() {
+    // return idA;
+    // }
+    //
+    // public void setIdA(Long idA) {
+    // this.idA = idA;
+    // }
+    //
+    // public String getAccountN() {
+    // return accountN;
+    // }
+    //
+    // public void setAccountN(String accountN) {
+    // this.accountN = accountN;
+    // }
+    //
+    // public String getCbu() {
+    // return cbu;
+    // }
+    //
+    // public void setCbu(String cbu) {
+    // this.cbu = cbu;
+    // }
+    //
+    // public String getAlias() {
+    // return alias;
+    // }
+    //
+    // public void setAlias(String alias) {
+    // this.alias = alias;
+    // }
+    //
+    // public float getBalance() {
+    // return balance;
+    // }
+    //
+    // public void setBalance(float balance) {
+    // this.balance = balance;
+    // }
 }
