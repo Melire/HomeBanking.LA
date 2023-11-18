@@ -27,25 +27,22 @@ public class IMPCurrencyService implements CurrencyService{
         return cr.save(currency);
     }
     @Override
-    public boolean deleteById(Long idC) {
-        cr.deleteById(idC);
-        return !(cr.existsById(idC));
+    public Currency save(Currency accType) {
+        if (accTR.existsByName(accType.getName())){
+            return null;
+        }
+        return accTR.save(accType);
     }
 
     @Override
-    public Currency update(Currency currency) {
-        return null;
-    }
-
-    /* @Override
      public Currency update(Currency currency) {
-         if (currency. (currency.getIdC())){
-             return currency.save(currency);
+         if (cr.existsById(currency.getIdC())){
+             return cr.save (currency);
          }
          currency.setIdC(0L);
          return currency;
 
-     } */
+     }
    @Override
    public boolean deleteById(Long idC) {
        if(cr.existsById(idC)){
