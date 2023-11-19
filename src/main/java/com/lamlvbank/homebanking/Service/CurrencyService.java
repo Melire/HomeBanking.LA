@@ -11,3 +11,8 @@ public interface CurrencyService {
     boolean deleteById(Long idC);
     Currency update(Currency currency);
 }
+/*
+@Repository
+public interface CurrencyRepository extends JpaRepository<Currency,Long> {
+    boolean existsByName(String name);
+} */

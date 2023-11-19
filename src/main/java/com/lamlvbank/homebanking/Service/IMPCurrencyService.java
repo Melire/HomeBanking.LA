@@ -26,13 +26,13 @@ public class IMPCurrencyService implements CurrencyService{
     public Currency save(Currency currency) {
         return cr.save(currency);
     }
-    @Override
-    public Currency save(Currency accType) {
-        if (accTR.existsByName(accType.getName())){
+    /* @Override
+    public Currency save(Currency currency) {
+        if (cr.existsByName(currency.getName())){
             return null;
         }
-        return accTR.save(accType);
-    }
+        return cr.save(currency);
+    } */
 
     @Override
      public Currency update(Currency currency) {
@@ -53,3 +53,29 @@ public class IMPCurrencyService implements CurrencyService{
    }
 }
 
+/*
+    @Override
+    public AccountType save(AccountType accType) {
+        if (accTR.existsByName(accType.getName())){
+            return null;
+        }
+        return accTR.save(accType);
+    }
+    @Override
+    public AccountType update(AccountType accType) {
+        if (accTR.existsById(accType.getIdAT())){
+            return accTR.save(accType);
+        }
+        accType.setIdAT(0L);
+        return accType;
+    }
+
+    @Override
+    public boolean deleteById(Long idAt) {
+        if(accTR.existsById(idAt)){
+            accTR.deleteById(idAt);
+            return true;
+        }
+        return false;
+    }
+} */

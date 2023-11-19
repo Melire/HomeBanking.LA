@@ -56,3 +56,36 @@ public class CurrencyController {
         }
 }
 }
+
+    /* @PostMapping
+    ResponseEntity<AccountType> save(@Valid @RequestBody AccountType accountType) {
+        AccountType accTypeSaved = aTS.save(accountType);
+        if (accTypeSaved!= null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(accTypeSaved);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
+    @PutMapping ("/{idAT}")
+    ResponseEntity<AccountType> update(@Valid @RequestBody AccountType accountType
+            ,@PathVariable("idAT") Long idAT) {
+        accountType.setIdAT(idAT);
+        AccountType accTypeUpdated = aTS.update(accountType);
+        if (accTypeUpdated.getIdAT()!=0) {
+            return ResponseEntity.ok().body(accTypeUpdated);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping ("/{idAT}")
+    ResponseEntity<?> deleteById (@PathVariable("idC") Long idC){
+        if (cr.deleteById(idC)){
+            return ResponseEntity.noContent().build();
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+} */
