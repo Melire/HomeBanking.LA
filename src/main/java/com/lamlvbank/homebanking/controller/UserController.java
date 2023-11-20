@@ -48,6 +48,18 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/register")
+    ResponseEntity <?> register(@Valid @RequestBody User user){
+        User userRegister = uS.register(user);
+        if (userRegister.getIdU() !=null){
+            return ResponseEntity.status(HttpStatus.CREATED).body(userRegister);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
     @DeleteMapping("/{idU}")
     ResponseEntity<?> deleteById(@PathVariable("idU")Long idU){
         if (uS.deleteById(idU)){

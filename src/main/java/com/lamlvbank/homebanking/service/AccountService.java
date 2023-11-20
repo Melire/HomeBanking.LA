@@ -17,4 +17,5 @@ public interface AccountService {
     public Account update(Account account);
    
 
+    public Account generateAccount();
 }

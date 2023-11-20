@@ -1,5 +1,6 @@
 package com.lamlvbank.homebanking.service;
 
+import com.lamlvbank.homebanking.model.Account;
 import com.lamlvbank.homebanking.model.User;
 import com.lamlvbank.homebanking.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,10 @@ import java.util.Optional;
 public class IMPUserService implements UserService{
     @Autowired
     private UserRepository userTR;
+
+    @Autowired
+    private AccountService accSer;
+
     @Override
     public List<User> findAll() {
         return userTR.findAll();
@@ -33,6 +38,15 @@ public class IMPUserService implements UserService{
         }
         return userTR.save(user);
     }
+
+    @Override
+    public User register(User user) {
+         Account account = accSer.generateAccount();
+         account.setUser(user);
+         user.getAccounts().add(account);
+         return userTR.save(user);
+    }
+
     @Override
     public User update(User user){
         Optional <User> userToUpdate = userTR.findByDni(user.getDni());

@@ -10,10 +10,11 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -41,8 +42,12 @@ public class User {
  @Column(nullable = false)
  private LocalDate birthdate;
 
- @OneToMany(mappedBy = "user")
+ @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
  //@JsonBackReference
  private List<Account> accounts;
+
+  public User (){
+   this.accounts = new ArrayList<>();
+  }
 
 }

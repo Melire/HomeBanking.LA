@@ -10,6 +10,7 @@ public interface UserService {
     Optional<User> findById(Long idU);
     Optional<User> findByDni(String dniU);
     User save(User user);
+    User register(User user);
     User update(User user);
     boolean deleteById(Long idU);
     boolean deleteByDni(String dniU);

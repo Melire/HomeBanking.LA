@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class ImplAccountService implements AccountService {
@@ -58,6 +61,60 @@ public class ImplAccountService implements AccountService {
         }
         return account;
     }
+
 //Validar que el cbu y al numero de cuenta pertenezca a la misma entidad
+
+
+
+    @Override
+    public Account generateAccount() {
+        Account account = new Account();
+        account.setAccountN(genAccNumber());
+        account.setCbu(genCBU());
+        account.setAlias(genAlias());
+        account.setBalance(0f);
+        return account;
+    }
+
+    private String genAccNumber(){
+        Long accNumberAux = 0L;
+        Random random = new Random();
+        String accNumber = "";
+        do{
+            accNumberAux = Math.abs(random.nextLong() % (999999999 + 1));
+            accNumber = String.valueOf(accNumberAux);
+        }while(accountRepo.existsByAccountN(accNumber));
+        return accNumber;
+    }
+
+    private String genCBU(){
+        Long accCBUAux = 0L;
+        Random random = new Random();
+        String accCBU = "";
+        do{
+            accCBUAux = Math.abs(random.nextLong() % (Long.MAX_VALUE + 1));
+            accCBU = String.valueOf(accCBUAux);
+        }while(accountRepo.existsByAccountN(accCBU));
+        return accCBU;
+    }
+
+    private String genAlias() {
+      String[] words  = {"gadget", "mecanico", "tio", "chucheria", "densa", "opinar", "amigos", "cosmetico",
+                         "delicadeza", "energia", "dos", "vena", "camaleon", "atrevida", "condenacion", "libro",
+                        "mago", "recepcion", "luchar", "cashbox", "atornillar", "desafio", "violar",
+                        "juego", "sadden", "incompetente", "desprendible", "deporte", "beneficioso",
+                        "corporacion"};
+       String alias = null;
+       Random random = new Random();
+
+       do{
+           alias = IntStream.range(0,3)
+                   .mapToObj(word -> words[random.nextInt(words.length)])
+                   .collect(Collectors.joining("."));
+       } while(accountRepo.existsByAlias(alias));
+       return alias;
+    }
+
+
 }
 
