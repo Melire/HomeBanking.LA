@@ -1,6 +1,9 @@
 package com.lamlvbank.homebanking.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -13,6 +16,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "idA")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,47 +46,13 @@ public class Account {
     @DecimalMax(value = "20000000.0")
     private float balance;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private AccountType accountType;
 
-    //GETTERS Y SETTERS
 
-
-//    public Long getIdA() {
-//        return idA;
-//    }
-//
-//    public void setIdA(Long idA) {
-//        this.idA = idA;
-//    }
-//
-//    public String getAccountN() {
-//        return accountN;
-//    }
-//
-//    public void setAccountN(String accountN) {
-//        this.accountN = accountN;
-//    }
-//
-//    public String getCbu() {
-//        return cbu;
-//    }
-//
-//    public void setCbu(String cbu) {
-//        this.cbu = cbu;
-//    }
-//
-//    public String getAlias() {
-//        return alias;
-//    }
-//
-//    public void setAlias(String alias) {
-//        this.alias = alias;
-//    }
-//
-//    public float getBalance() {
-//        return balance;
-//    }
-//
-//    public void setBalance(float balance) {
-//        this.balance = balance;
-//    }
+    public void addType(Long idAT) {
+        AccountType accType = new AccountType();
+        accType.setIdAT(idAT);
+        this.setAccountType(accType);
+    }
 }

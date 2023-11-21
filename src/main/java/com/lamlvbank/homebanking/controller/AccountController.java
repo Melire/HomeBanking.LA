@@ -33,10 +33,11 @@ public class AccountController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     //CREATE ACCOUNT
-    @PostMapping
-    ResponseEntity<Account> save(@Valid @RequestBody Account account) {
+    @PostMapping("/{idAT}")
+    ResponseEntity<Account> save(@Valid @RequestBody Account account,@PathVariable("idAT") Long idAT) {
+        account.addType(idAT);
         Account accSaved = accountServ.save(account);
         if (accSaved != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(accSaved);
