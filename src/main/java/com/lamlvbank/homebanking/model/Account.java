@@ -1,11 +1,14 @@
 package com.lamlvbank.homebanking.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,46 +42,12 @@ public class Account {
     @DecimalMin(value = "0.0")
     @DecimalMax(value = "20000000.0")
     private float balance;
+    
+    @Column
+    private LocalDateTime created_at;
 
-    // GETTERS Y SETTERS
-
-    // public Long getIdA() {
-    // return idA;
-    // }
-    //
-    // public void setIdA(Long idA) {
-    // this.idA = idA;
-    // }
-    //
-    // public String getAccountN() {
-    // return accountN;
-    // }
-    //
-    // public void setAccountN(String accountN) {
-    // this.accountN = accountN;
-    // }
-    //
-    // public String getCbu() {
-    // return cbu;
-    // }
-    //
-    // public void setCbu(String cbu) {
-    // this.cbu = cbu;
-    // }
-    //
-    // public String getAlias() {
-    // return alias;
-    // }
-    //
-    // public void setAlias(String alias) {
-    // this.alias = alias;
-    // }
-    //
-    // public float getBalance() {
-    // return balance;
-    // }
-    //
-    // public void setBalance(float balance) {
-    // this.balance = balance;
-    // }
+    @Column
+    private LocalDateTime updated_at;
+//Agregue LocalDateTime  Fecha de creacion y fecha de modificacion //ImplAccount
+  
 }
