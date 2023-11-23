@@ -32,6 +32,7 @@ public class ImplAccountService implements AccountService {
         if (!(accountRepo.existsByAccountN(account.getAccountN())) && !(accountRepo.existsByAlias(account.getAlias()))
                 && !(accountRepo.existsByCbu(account.getCbu()))) {
                     account.setCreated_at(LocalDateTime.now());
+                    account.setUpdated_at(LocalDateTime.now());
             return accountRepo.save(account);
         } else {
             return null;
