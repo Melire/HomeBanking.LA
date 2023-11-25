@@ -46,7 +46,7 @@ public class CurrencyController {
     }
     @PutMapping ("/{idC}")
     ResponseEntity<Currency> update(@Valid @RequestBody Currency currency
-            ,@PathVariable("idC") Long idC) {
+                                        ,@PathVariable("idC") Long idC) {
         currency.setIdC(idC);
         Currency currencyUpdated = cs.update(currency);
         if (currencyUpdated.getIdC()!=0) {
@@ -55,37 +55,13 @@ public class CurrencyController {
             return ResponseEntity.badRequest().build();
         }
 }
-}
 
-    /* @PostMapping
-    ResponseEntity<AccountType> save(@Valid @RequestBody AccountType accountType) {
-        AccountType accTypeSaved = aTS.save(accountType);
-        if (accTypeSaved!= null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(accTypeSaved);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
-
-    }
-
-    @PutMapping ("/{idAT}")
-    ResponseEntity<AccountType> update(@Valid @RequestBody AccountType accountType
-            ,@PathVariable("idAT") Long idAT) {
-        accountType.setIdAT(idAT);
-        AccountType accTypeUpdated = aTS.update(accountType);
-        if (accTypeUpdated.getIdAT()!=0) {
-            return ResponseEntity.ok().body(accTypeUpdated);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @DeleteMapping ("/{idAT}")
+    @DeleteMapping ("/{idC}")
     ResponseEntity<?> deleteById (@PathVariable("idC") Long idC){
-        if (cr.deleteById(idC)){
+        if (cs.deleteById(idC)){
             return ResponseEntity.noContent().build();
         }else{
             return ResponseEntity.notFound().build();
         }
     }
-} */
+}
