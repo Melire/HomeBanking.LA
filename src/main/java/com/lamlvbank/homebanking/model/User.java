@@ -1,15 +1,13 @@
 package com.lamlvbank.homebanking.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,11 +40,17 @@ public class User {
  @Column(nullable = false)
  private LocalDate birthdate;
 
+ @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = JsonFormat.Shape.STRING)
+ private LocalDateTime creationDate;
+
+ @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = JsonFormat.Shape.STRING)
+ private LocalDateTime lastModifyDate;
+
  @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
  //@JsonBackReference
  private List<Account> accounts;
 
-  public User (){
+ public User (){
    this.accounts = new ArrayList<>();
   }
 

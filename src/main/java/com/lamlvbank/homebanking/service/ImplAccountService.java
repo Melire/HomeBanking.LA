@@ -101,9 +101,9 @@ public class ImplAccountService implements AccountService {
     private String genAlias() {
       String[] words  = {"gadget", "mecanico", "tio", "chucheria", "densa", "opinar", "amigos", "cosmetico",
                          "delicadeza", "energia", "dos", "vena", "camaleon", "atrevida", "condenacion", "libro",
-                        "mago", "recepcion", "luchar", "cashbox", "atornillar", "desafio", "violar",
-                        "juego", "sadden", "incompetente", "desprendible", "deporte", "beneficioso",
-                        "corporacion"};
+                         "mago", "recepcion", "luchar", "cashbox", "atornillar", "desafio", "violar",
+                         "juego", "sadden", "incompetente", "desprendible", "deporte", "beneficioso",
+                         "corporacion"};
        String alias = null;
        Random random = new Random();
 
@@ -114,7 +114,5 @@ public class ImplAccountService implements AccountService {
        } while(accountRepo.existsByAlias(alias));
        return alias;
     }
-
-
 }
 

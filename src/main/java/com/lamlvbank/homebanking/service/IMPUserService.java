@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -36,9 +37,15 @@ public class IMPUserService implements UserService{
         if(userTR.existsByDni(user.getDni())){
             return null;
         }
+        user.setCreationDate(LocalDateTime.now());
+        user.setLastModifyDate(LocalDateTime.now());
         return userTR.save(user);
     }
-
+/*
+generar usuario (ser recibe por parametros)
+generar cuenta
+indexar ambas entidades (asociar cuenta con usuario y usuario con cuenta)
+ */
     @Override
     public User register(User user) {
          Account account = accSer.generateAccount();
@@ -54,11 +61,13 @@ public class IMPUserService implements UserService{
             userToUpdate.get().setName(user.getName());
             userToUpdate.get().setSurname(user.getSurname());
             userToUpdate.get().setBirthdate(user.getBirthdate());
+            userToUpdate.get().setLastModifyDate(LocalDateTime.now());
             User userUpdated = userTR.save(userToUpdate.get());
             return userUpdated;
         }
         return user;
     }
+
     @Override
     public boolean deleteById(Long idU) {
         if (userTR.existsById(idU)) {
