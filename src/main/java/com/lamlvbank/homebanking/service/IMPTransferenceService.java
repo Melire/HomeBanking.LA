@@ -1,6 +1,7 @@
 package com.lamlvbank.homebanking.service;
 
 import com.lamlvbank.homebanking.model.Transference;
+import com.lamlvbank.homebanking.model.dto.TransferenceDTO;
 import com.lamlvbank.homebanking.repository.TransferenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,12 +29,21 @@ public class IMPTransferenceService implements TransferenceService{
     }
 
     @Override
+    public Transference register(TransferenceDTO dto) {
+        return null;
+    }
+
+    @Override
     public Transference update(Transference transference) {
         return null;
     }
 
     @Override
     public boolean deleteById(Long idT) {
+        if(tR.existsById(idT)){
+            tR.deleteById(idT);
+            return true;
+        }
         return false;
     }
 }
