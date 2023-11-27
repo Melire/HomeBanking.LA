@@ -5,6 +5,7 @@ import com.lamlvbank.homebanking.Repository.CurrencyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class IMPCurrencyService implements CurrencyService{
         if (cr.existsByName(currency.getName())){
             return null;
         }
+        currency.setCreationDate(LocalDateTime.now());
         return cr.save(currency);
     }
 
