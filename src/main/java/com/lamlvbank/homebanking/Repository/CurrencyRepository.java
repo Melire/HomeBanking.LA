@@ -9,8 +9,3 @@ import org.springframework.stereotype.Repository;
 public interface CurrencyRepository extends JpaRepository<Currency, Long> {
     boolean existsByName(String name);
 }
-/*
-@Repository
-public interface CurrencyRepository extends JpaRepository<Currency,Long> {
-    boolean existsByName(String name);
-} */
