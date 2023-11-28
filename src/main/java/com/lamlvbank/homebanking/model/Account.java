@@ -2,13 +2,16 @@ package com.lamlvbank.homebanking.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,12 +45,21 @@ public class Account {
     @DecimalMin(value = "0.0")
     @DecimalMax(value = "20000000.0")
     private float balance;
-    
-    @Column
+
+    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     private LocalDateTime created_at;
 
-    @Column
+    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     private LocalDateTime updated_at;
 //Agregue LocalDateTime  Fecha de creacion y fecha de modificacion //ImplAccount
-  
+
+    @ManyToOne
+    @JsonManagedReference
+    private Currency currency;
+
+    public void addCurrency(Long idC) {
+        Currency currency = new Currency();
+        currency.setIdC(idC);
+        this.setCurrency(currency);
+    }
 }

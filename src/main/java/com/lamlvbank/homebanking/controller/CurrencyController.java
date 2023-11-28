@@ -1,8 +1,8 @@
-package com.lamlvbank.homebanking.Controller;
+package com.lamlvbank.homebanking.controller;
 
 
-import com.lamlvbank.homebanking.Model.Currency;
-import com.lamlvbank.homebanking.Service.CurrencyService;
+import com.lamlvbank.homebanking.model.Currency;
+import com.lamlvbank.homebanking.service.CurrencyService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

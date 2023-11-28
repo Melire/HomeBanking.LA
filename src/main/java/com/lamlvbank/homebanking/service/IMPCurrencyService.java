@@ -1,7 +1,7 @@
-package com.lamlvbank.homebanking.Service;
+package com.lamlvbank.homebanking.service;
 
-import com.lamlvbank.homebanking.Model.Currency;
-import com.lamlvbank.homebanking.Repository.CurrencyRepository;
+import com.lamlvbank.homebanking.model.Currency;
+import com.lamlvbank.homebanking.repository.CurrencyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

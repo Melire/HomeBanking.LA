@@ -1,6 +1,6 @@
-package com.lamlvbank.homebanking.Service;
+package com.lamlvbank.homebanking.service;
 
-import com.lamlvbank.homebanking.Model.Currency;
+import com.lamlvbank.homebanking.model.Currency;
 import java.util.List;
 import java.util.Optional;
 

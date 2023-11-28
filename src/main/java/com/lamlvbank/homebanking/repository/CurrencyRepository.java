@@ -1,7 +1,7 @@
-package com.lamlvbank.homebanking.Repository;
+package com.lamlvbank.homebanking.repository;
 
 
-import com.lamlvbank.homebanking.Model.Currency;
+import com.lamlvbank.homebanking.model.Currency;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
