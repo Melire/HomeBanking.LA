@@ -44,11 +44,9 @@ public class Account {
     @DecimalMax(value = "20000000.0")
     private float balance;
 
-    @Column
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     private LocalDateTime created_at;
 
-    @Column
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     private LocalDateTime updated_at;
 
