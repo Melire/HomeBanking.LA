@@ -15,12 +15,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "idT")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idT")
 public class Transference extends Transaction {
     private Long transferenceN;
     private String reference;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Account destiny;
 
 
