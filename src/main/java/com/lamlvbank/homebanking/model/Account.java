@@ -11,10 +11,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @Setter
 @Getter
 @Entity
@@ -47,7 +48,11 @@ public class Account {
     @DecimalMax(value = "20000000.0")
     private float balance;
 
-    @OneToMany(mappedBy = "origin", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties("transactions")
+    @OneToMany(mappedBy = "origin", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+//    @JsonIgnoreProperties("transactions")
     private List<Transaction> transactions;
+
+    public Account(){
+        this.transactions = new ArrayList<>();
+    }
 }

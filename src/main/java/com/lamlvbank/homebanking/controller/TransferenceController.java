@@ -35,7 +35,7 @@ public class TransferenceController {
     }
 
     @PostMapping
-    ResponseEntity<Transference> save(/*@Valid*/ @RequestBody Transference transference){
+    ResponseEntity<Transference> save(@Valid @RequestBody Transference transference){
         System.out.println(transference);
         Transference transferenceSaved = ts.save(transference);
         if (transferenceSaved != null){
@@ -45,7 +45,7 @@ public class TransferenceController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/register")
     ResponseEntity<Transference> register(@RequestBody TransferenceDTO dto){
         Transference transferenceSaved = ts.register(dto);
         if (transferenceSaved  != null){

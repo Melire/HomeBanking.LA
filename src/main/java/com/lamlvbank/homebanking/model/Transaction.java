@@ -1,6 +1,7 @@
 package com.lamlvbank.homebanking.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -12,7 +13,7 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "idT")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "idT")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Transaction {
     @Id
@@ -27,6 +28,13 @@ public class Transaction {
     @Column(nullable = false)
     private float amount;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Account origin;
+
+    public void addOriginAcc(Long idO){
+        Account origin = new Account();
+        origin.setIdA(idO);
+        this.setOrigin(origin);
+        this.getOrigin().getTransactions().add(this);
+    }
 }
