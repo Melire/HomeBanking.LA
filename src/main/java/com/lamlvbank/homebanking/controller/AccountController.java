@@ -18,7 +18,8 @@ public class AccountController {
     @Autowired
     private AccountService accountServ;
 
-    // Se usa Dto por que el front
+    // Se usa Dto por que el front no se puede usar informacion sensible, por
+    // cuestion de seguridad
     // FIND ALL ACCOUNTS
     @GetMapping
     ResponseEntity<List<AccountDto>> findAll() {
@@ -37,8 +38,9 @@ public class AccountController {
     }
 
     // CREATE ACCOUNT
-    @PostMapping
-    ResponseEntity<Account> save(@Valid @RequestBody Account account) {
+    @PostMapping("/{idAT}")
+    ResponseEntity<Account> save(@Valid @RequestBody Account account, @PathVariable("idAT") Long idAT) {
+        account.addType(idAT);
         Account accSaved = accountServ.save(account);
         if (accSaved != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(accSaved);
