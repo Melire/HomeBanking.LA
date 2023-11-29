@@ -19,17 +19,23 @@ public class IMPUserService implements UserService{
     private AccountService accSer;
 
     @Override
-    public List<User> findAll() {
-        return userTR.findAll();
-    }
+    public List<User> findAll() { return userTR.findAll(); }
 
     @Override
     public Optional<User> findByDni(String dniU){
-        return userTR.findByDni(dniU);
+        Optional<User> user = userTR.findByDni(dniU);
+        if(user.isPresent()) {
+            user.get().setPassword("******");
+        }
+        return user;
     }
     @Override
     public Optional<User> findById(Long idU) {
-        return userTR.findById(idU);
+        Optional<User> user = userTR.findById(idU);
+        if(user.isPresent()) {
+            user.get().setPassword("******");
+        }
+        return user;
     }
 
     @Override
@@ -60,6 +66,7 @@ indexar ambas entidades (asociar cuenta con usuario y usuario con cuenta)
         if(userToUpdate.isPresent()){
             userToUpdate.get().setName(user.getName());
             userToUpdate.get().setSurname(user.getSurname());
+            userToUpdate.get().setPassword(user.getPassword());
             userToUpdate.get().setBirthdate(user.getBirthdate());
             userToUpdate.get().setLastModifyDate(LocalDateTime.now());
             User userUpdated = userTR.save(userToUpdate.get());

@@ -32,6 +32,9 @@ public class User {
  @Column(nullable = false)
  private String surname;
 
+ @NonNull @NotBlank @Size(min=6, max=40)
+ private String password;
+
  @NonNull @NotBlank @Size(min=8, max=10)
  @Column(nullable = false, unique = true)
  private String dni;
