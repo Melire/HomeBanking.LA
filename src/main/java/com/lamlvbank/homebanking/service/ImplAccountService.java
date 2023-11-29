@@ -1,6 +1,8 @@
 package com.lamlvbank.homebanking.service;
 
+import com.lamlvbank.homebanking.mappers.AccountMapper;
 import com.lamlvbank.homebanking.model.Account;
+import com.lamlvbank.homebanking.model.dtos.AccountDto;
 import com.lamlvbank.homebanking.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.stream.Collectors;
+
 @Service
 public class ImplAccountService implements AccountService {
 
@@ -16,23 +20,39 @@ public class ImplAccountService implements AccountService {
     @Autowired
     private AccountRepository accountRepo;
 
+    /*
+     * @Override
+     * public List<Account> findAll() {
+     * return accountRepo.findAll();
+     * }
+     * 
+     * @Override
+     * public Optional<Account> findById(Long idA) {
+     * return accountRepo.findById(idA);
+     * }
+     */
     @Override
-    public List<Account> findAll() {
-        return accountRepo.findAll();
+    public List<AccountDto> findAll() {
+        List<Account> account = accountRepo.findAll();
+        return account.stream().map(AccountMapper::accountToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Account> findById(Long idA) {
-        return accountRepo.findById(idA);
+    public Optional<AccountDto> findById(Long idA) {
+        Optional<Account> optAccount = accountRepo.findById(idA);
+
+        return Optional.of(AccountMapper.accountToDto(optAccount.get()));
+
     }
-//linea 34 Setee la hora en la que se creo la cuenta
+    // linea 34 Setee la hora en la que se creo la cuenta
 
     @Override
     public Account save(Account account) {
         if (!(accountRepo.existsByAccountN(account.getAccountN())) && !(accountRepo.existsByAlias(account.getAlias()))
                 && !(accountRepo.existsByCbu(account.getCbu()))) {
-                    account.setCreated_at(LocalDateTime.now());
-                    account.setUpdated_at(LocalDateTime.now());
+            account.setCreated_at(LocalDateTime.now());
+            account.setUpdated_at(LocalDateTime.now());
             return accountRepo.save(account);
         } else {
             return null;
@@ -48,7 +68,8 @@ public class ImplAccountService implements AccountService {
         return false;
 
     }
-//Linea 58 setee la hora en la que se modifico
+
+    // Linea 58 setee la hora en la que se modifico
     @Override
     public Account update(Account account) {
         Optional<Account> accountToUpdate = accountRepo.findByAccountN(account.getAccountN());
@@ -62,6 +83,5 @@ public class ImplAccountService implements AccountService {
         }
         return account;
     }
-//Validar que el cbu y al numero de cuenta pertenezca a la misma entidad
+    // Validar que el cbu y al numero de cuenta pertenezca a la misma entidad
 }
-

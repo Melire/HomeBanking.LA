@@ -1,6 +1,7 @@
 package com.lamlvbank.homebanking.controller;
 
 import com.lamlvbank.homebanking.model.Account;
+import com.lamlvbank.homebanking.model.dtos.AccountDto;
 import com.lamlvbank.homebanking.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,24 +18,25 @@ public class AccountController {
     @Autowired
     private AccountService accountServ;
 
-    //FIND ALL ACCOUNTS
+    // Se usa Dto por que el front
+    // FIND ALL ACCOUNTS
     @GetMapping
-    ResponseEntity<List<Account>> findAll() {
+    ResponseEntity<List<AccountDto>> findAll() {
         return ResponseEntity.ok().body(accountServ.findAll());
     }
 
-    //FIND ACCOUNT BY ID
+    // FIND ACCOUNT BY ID
     @GetMapping("/{idA}")
-    ResponseEntity<Account> findById(@PathVariable("idA") Long idA) {
-        Optional<Account> optAccount = accountServ.findById(idA);
+    ResponseEntity<AccountDto> findById(@PathVariable("idA") Long idA) {
+        Optional<AccountDto> optAccount = accountServ.findById(idA);
         if (optAccount.isPresent()) {
             return ResponseEntity.ok().body(optAccount.get());
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-    
-    //CREATE ACCOUNT
+
+    // CREATE ACCOUNT
     @PostMapping
     ResponseEntity<Account> save(@Valid @RequestBody Account account) {
         Account accSaved = accountServ.save(account);
@@ -45,18 +47,19 @@ public class AccountController {
         }
 
     }
-    //UPDATE ACCOUNT
+
+    // UPDATE ACCOUNT
     @PutMapping
     ResponseEntity<Account> update(@Valid @RequestBody Account account) {
         Account accUpdated = accountServ.update(account);
-        if (accUpdated.getIdA()!=null){
+        if (accUpdated.getIdA() != null) {
             return ResponseEntity.ok(accUpdated);
-        }else {
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-    //DELETE ACCOUNT
+    // DELETE ACCOUNT
     @DeleteMapping("/{idA}")
     ResponseEntity<?> deleteById(@PathVariable("idA") Long idA) {
         if (accountServ.deleteById(idA)) {
