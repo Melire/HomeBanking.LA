@@ -1,20 +1,17 @@
 package com.lamlvbank.homebanking.model;
-
 import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idA")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idA")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,33 +40,30 @@ public class Account {
     @DecimalMax(value = "20000000.0")
     private float balance;
 
+    // Agregue LocalDateTime Fecha de creacion y fecha de modificacion //ImplAccount
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime createDT; // Fecha Creacion
+    private LocalDateTime createDT;
 
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime lastModifyDT; // Fecha Ultima modificacion
+    private LocalDateTime lastModifyDT;
 
+    // Implementacion de AccountType y de Currency
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("account")
     private AccountType accountType;
 
-    // Metodo para indexar (conectar a nivel Jpa) entidades
+    @ManyToOne
+    @JsonIgnoreProperties("account")
+    private Currency currency;
+
+    // Metodos para indexar (conectar a nivel Jpa) entidades
     public void addType(Long idAT) {
         AccountType accType = new AccountType();
         accType.setIdAT(idAT);
         this.setAccountType(accType);
-
-    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime created_at;
-
-    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime updated_at;
-//Agregue LocalDateTime  Fecha de creacion y fecha de modificacion //ImplAccount
-
-    @ManyToOne
-    @JsonManagedReference
-    private Currency currency;
+    }
 
     public void addCurrency(Long idC) {
         Currency currency = new Currency();

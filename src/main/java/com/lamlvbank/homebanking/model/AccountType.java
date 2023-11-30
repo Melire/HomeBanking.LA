@@ -1,12 +1,9 @@
 package com.lamlvbank.homebanking.model;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idAT")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idAT")
 public class AccountType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +31,7 @@ public class AccountType {
     private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "accountType")
+    @JsonIgnoreProperties({"accountType","account"}) 
     private List<Account> account;
 
 }

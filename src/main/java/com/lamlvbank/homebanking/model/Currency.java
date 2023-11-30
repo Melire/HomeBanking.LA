@@ -1,12 +1,10 @@
 package com.lamlvbank.homebanking.model;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idC")
 public class Currency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +27,7 @@ public class Currency {
     private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "currency")
-    @JsonBackReference
+    @JsonIgnoreProperties({"currency","account"})
     private List<Account> accounts;
 
     /* @OneToMany(mappedBy = "Currency")

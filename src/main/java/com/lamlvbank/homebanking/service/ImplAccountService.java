@@ -66,7 +66,8 @@ public class ImplAccountService implements AccountService {
     @Override
     public AccountDto openAccount(AccountDto dto) {
         Account account = generateAccount();
-        account.addType(dto.getIdT());
+        account.addType(dto.getIdT());//Agregado de la rama de Meli
+        account.addCurrency(dto.getIdC());//Agregado de la rama de Pedro
         dto = AccountMapper.accountToDto(accountRepo.save(account));
         return dto;
     }

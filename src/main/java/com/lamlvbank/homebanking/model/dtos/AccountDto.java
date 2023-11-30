@@ -18,4 +18,5 @@ public class AccountDto {
     private String alias;
     private float balance;
     private Long idT;
+    private Long idC;
 }
