@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-
     public boolean existsByAccountN(String accountN);
 
     public boolean existsByCbu(String cbu);
@@ -17,7 +16,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     public boolean existsByAlias(String alias);
 
     public Optional<Account> findByAccountN(String accountN);
-    public Optional<Account> findByAccountNAndCbu(String accountN,String cbu); //Probar
 
-
+    public Optional<Account> findByAccountNAndCbu(String accountN, String cbu); // Probar
 }

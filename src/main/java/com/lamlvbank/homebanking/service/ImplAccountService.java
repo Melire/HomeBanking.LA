@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class ImplAccountService implements AccountService {
@@ -21,6 +22,8 @@ public class ImplAccountService implements AccountService {
     private AccountRepository accountRepo;
 
     /*
+     * !Metodos viejos
+     * 
      * @Override
      * public List<Account> findAll() {
      * return accountRepo.findAll();
@@ -45,18 +48,27 @@ public class ImplAccountService implements AccountService {
         return Optional.of(AccountMapper.accountToDto(optAccount.get()));
 
     }
-    // linea 34 Setee la hora en la que se creo la cuenta
+    // linea 57 Setee la fecha y hora actual en la que se creo la cuenta
 
     @Override
     public Account save(Account account) {
         if (!(accountRepo.existsByAccountN(account.getAccountN())) && !(accountRepo.existsByAlias(account.getAlias()))
                 && !(accountRepo.existsByCbu(account.getCbu()))) {
-            account.setCreated_at(LocalDateTime.now());
-            account.setUpdated_at(LocalDateTime.now());
+            account.setCreateDT(LocalDateTime.now());
+            account.setLastModifyDT(LocalDateTime.now());
             return accountRepo.save(account);
         } else {
             return null;
         }
+    }
+
+    // REGISTER
+    @Override
+    public AccountDto openAccount(AccountDto dto) {
+        Account account = generateAccount();
+        account.addType(dto.getIdT());
+        dto = AccountMapper.accountToDto(accountRepo.save(account));
+        return dto;
     }
 
     @Override
@@ -66,22 +78,73 @@ public class ImplAccountService implements AccountService {
             return true;
         }
         return false;
-
     }
 
-    // Linea 58 setee la hora en la que se modifico
+    // Linea 58 setee la fecha y hora actual en la que se modifico
     @Override
     public Account update(Account account) {
         Optional<Account> accountToUpdate = accountRepo.findByAccountN(account.getAccountN());
         if (accountToUpdate.isPresent()) {
-
             accountToUpdate.get().setAlias(account.getAlias());
             accountToUpdate.get().setBalance(account.getBalance());
-            accountToUpdate.get().setUpdated_at(LocalDateTime.now());
+            accountToUpdate.get().setLastModifyDT(LocalDateTime.now());
             Account accountUpdated = accountRepo.save(accountToUpdate.get());
             return accountUpdated;
         }
         return account;
     }
     // Validar que el cbu y al numero de cuenta pertenezca a la misma entidad
+
+    @Override
+    public Account generateAccount() {
+        Account account = new Account();
+        account.setAccountN(genAccNumber());
+        account.setCbu(genCBU());
+        account.setAlias(genAlias());
+        account.setBalance(0f);
+        account.setCreateDT(LocalDateTime.now());
+        account.setLastModifyDT(LocalDateTime.now());
+        return account;
+    }
+
+    // Genera numero random para el accountN
+    private String genAccNumber() {
+        Long accNumberAux = 0L;
+        Random random = new Random();
+        String accNumber = "";
+        do {
+            accNumberAux = Math.abs(random.nextLong() % (999999999 + 1));
+            accNumber = String.valueOf(accNumberAux);
+        } while (accountRepo.existsByAccountN(accNumber));
+        return accNumber;
+    }
+
+    private String genCBU() {
+        Long accCBUAux = 0L;
+        Random random = new Random();
+        String accCBU = "";
+        do {
+            accCBUAux = Math.abs(random.nextLong() % (Long.MAX_VALUE + 1));
+            accCBU = String.valueOf(accCBUAux);
+        } while (accountRepo.existsByAccountN(accCBU));
+        return accCBU;
+    }
+
+    private String genAlias() {
+        String[] words = { "gadget", "mecanico", "tio", "chucheria", "densa", "opinar", "amigos", "cosmetico",
+                "delicadeza", "energia", "dos", "vena", "camaleon", "atrevida", "condenacion", "libro",
+                "mago", "recepcion", "luchar", "cashbox", "atornillar", "desafio", "volar",
+                "juego", "sadden", "incompetente", "desprendible", "deporte", "beneficioso",
+                "corporacion" };
+        String alias = null;
+        Random random = new Random();
+
+        do {
+            alias = IntStream.range(0, 3)// Recorre 3 veces el array
+                    .mapToObj(word -> words[random.nextInt(words.length)])// obtiene la palabra de words por cada
+                                                                          // reccorido
+                    .collect(Collectors.joining("."));// Toma la palabra y lo junta al string (alias)
+        } while (accountRepo.existsByAlias(alias));
+        return alias;
+    }
 }

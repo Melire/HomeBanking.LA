@@ -13,10 +13,10 @@ public class AccountMapper {
     public AccountDto accountToDto(Account account) {
         AccountDto dto = new AccountDto();
         dto.setAccountN(account.getAccountN());
-        // dto.setType(account.getType()); falta habilitar el AccountType
         dto.setCbu(account.getCbu());
         dto.setAlias(account.getAlias());
         dto.setBalance(account.getBalance());
+        dto.setIdT(account.getAccountType().getIdAT());
 
         return dto;
 

@@ -3,16 +3,11 @@ package com.lamlvbank.homebanking.model;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -48,15 +43,18 @@ public class Account {
     @DecimalMax(value = "20000000.0")
     private float balance;
 
+    @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime created_at;
+    private LocalDateTime createDT; // Fecha Creacion
 
+    @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime updated_at;
+    private LocalDateTime lastModifyDT; // Fecha Ultima modificacion
 
     @ManyToOne(fetch = FetchType.EAGER)
     private AccountType accountType;
 
+    // Metodo para indexar (conectar a nivel Jpa) entidades
     public void addType(Long idAT) {
         AccountType accType = new AccountType();
         accType.setIdAT(idAT);
