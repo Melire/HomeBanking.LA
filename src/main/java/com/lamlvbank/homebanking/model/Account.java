@@ -59,5 +59,21 @@ public class Account {
         AccountType accType = new AccountType();
         accType.setIdAT(idAT);
         this.setAccountType(accType);
+
+    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    private LocalDateTime created_at;
+
+    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    private LocalDateTime updated_at;
+//Agregue LocalDateTime  Fecha de creacion y fecha de modificacion //ImplAccount
+
+    @ManyToOne
+    @JsonManagedReference
+    private Currency currency;
+
+    public void addCurrency(Long idC) {
+        Currency currency = new Currency();
+        currency.setIdC(idC);
+        this.setCurrency(currency);
     }
 }
