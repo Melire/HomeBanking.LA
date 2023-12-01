@@ -10,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class IMPUserService implements UserService{
+
     @Autowired
     private UserRepository userTR;
 
@@ -25,7 +27,7 @@ public class IMPUserService implements UserService{
     public Optional<User> findByDni(String dniU){
         Optional<User> user = userTR.findByDni(dniU);
         if(user.isPresent()) {
-            user.get().setPassword("******");
+           user.get().setPassword("******");
         }
         return user;
     }
@@ -68,9 +70,10 @@ indexar ambas entidades (asociar cuenta con usuario y usuario con cuenta)
             userToUpdate.get().setSurname(user.getSurname());
             userToUpdate.get().setPassword(user.getPassword());
             userToUpdate.get().setBirthdate(user.getBirthdate());
-            userToUpdate.get().setLastModifyDate(LocalDateTime.now());
+            //userToUpdate.get().setLastModifyDate(LocalDateTime.now());
             User userUpdated = userTR.save(userToUpdate.get());
-            return userUpdated;
+            //return userUpdated;
+            return userTR.findByDni(user.getDni()).get();
         }
         return user;
     }
