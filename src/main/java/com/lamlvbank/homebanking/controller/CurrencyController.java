@@ -37,13 +37,14 @@ public class CurrencyController {
     @PostMapping
     ResponseEntity<Currency> save(@Valid @RequestBody Currency currency) {
         Currency currencySaved = cs.save(currency);
-        if (currencySaved != null) {
+        if (currencySaved.getIdC() != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(currencySaved);
         } else {
             return ResponseEntity.badRequest().build();
         }
 
     }
+    
     @PutMapping ("/{idC}")
     ResponseEntity<Currency> update(@Valid @RequestBody Currency currency
                                         ,@PathVariable("idC") Long idC) {

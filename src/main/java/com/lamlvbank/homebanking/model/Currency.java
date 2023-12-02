@@ -1,12 +1,10 @@
 package com.lamlvbank.homebanking.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,10 +26,5 @@ public class Currency {
     private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "currency")
-    @JsonBackReference
     private List<Account> accounts;
-
-    /* @OneToMany(mappedBy = "Currency")
-    private List<Franlocura> Franlocura; */
-
 }

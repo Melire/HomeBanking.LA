@@ -41,7 +41,7 @@ public class AccountController {
         account.addCurrency(idC);
         account.addType(idAT);
         Account accSaved = accServ.save(account);
-        if (accSaved != null) {
+        if (accSaved.getIdA() != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(accSaved);
         } else {
             return ResponseEntity.badRequest().build();
