@@ -32,7 +32,7 @@ public class User {
  @Column(nullable = false)
  private String surname;
 
- @NonNull @NotBlank @Size(min=6, max=40)
+ @NonNull @NotBlank @Size(min=6, max=240)
  private String password;
 
  @NonNull @NotBlank @Size(min=8, max=10)

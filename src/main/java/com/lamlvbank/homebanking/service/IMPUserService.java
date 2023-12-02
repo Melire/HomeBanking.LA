@@ -3,11 +3,10 @@ package com.lamlvbank.homebanking.service;
 import com.lamlvbank.homebanking.model.Account;
 import com.lamlvbank.homebanking.model.User;
 import com.lamlvbank.homebanking.repository.UserRepository;
-import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -15,12 +14,15 @@ import java.util.Optional;
 @Service
 public class IMPUserService implements UserService{
 
-
-    @Autowired
     private  UserRepository userTR;
-
-    @Autowired
     private AccountService accSer;
+    private PasswordEncoder passEnc;
+
+    public IMPUserService(UserRepository userRep, AccountService accSer) {
+        this.userTR = userRep;
+        this.accSer = accSer;
+        this.passEnc = new BCryptPasswordEncoder();
+    }
 
     @Override
     public List<User> findAll() { return userTR.findAll(); }
@@ -36,9 +38,6 @@ public class IMPUserService implements UserService{
     @Override
     public Optional<User> findById(Long idU) {
         Optional<User> user = userTR.findById(idU);
-        if(user.isPresent()) {
-            user.get().setPassword("******");
-        }
         return user;
     }
 
@@ -49,6 +48,7 @@ public class IMPUserService implements UserService{
         }
         user.setCreationDate(LocalDateTime.now());
         user.setLastModifyDate(LocalDateTime.now());
+        user.setPassword(this.passEnc.encode(user.getPassword()));
         return userTR.save(user);
     }
 /*
@@ -70,7 +70,8 @@ indexar ambas entidades (asociar cuenta con usuario y usuario con cuenta)
         if(userToUpdate.isPresent()){
             userToUpdate.get().setName(user.getName());
             userToUpdate.get().setSurname(user.getSurname());
-            userToUpdate.get().setPassword(user.getPassword());
+            //userToUpdate.get().setPassword(user.getPassword());
+            userToUpdate.get().setPassword(this.passEnc.encode(user.getPassword()));
             userToUpdate.get().setBirthdate(user.getBirthdate());
             //userToUpdate.get().setLastModifyDate(LocalDateTime.now());
             User userUpdated = userTR.save(userToUpdate.get());
