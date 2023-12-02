@@ -22,6 +22,16 @@ public class IMPTransferenceService implements TransferenceService{
     }
 
     @Override
+    public List<Transference> findAllByOrigin(Long idO){
+        return tR.findAllByOriginIdA(idO);
+    }
+
+    @Override
+    public List<Transference> findAllByDestiny(Long idD){
+        return tR.findAllByDestinyIdA(idD);
+    }
+
+    @Override
     public Optional<Transference> findById(Long idT) {
         return tR.findById(idT);
     }
@@ -30,7 +40,7 @@ public class IMPTransferenceService implements TransferenceService{
     public Transference save(Transference transference) {
         accServ.updateAmounts(transference.getOrigin().getIdA(), transference.getDestiny().getIdA()
                             ,transference.getAmount());
-        return tR.save(transference);   
+        return tR.save(transference);
     }
 
     @Override

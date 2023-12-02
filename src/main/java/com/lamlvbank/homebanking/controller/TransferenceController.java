@@ -23,6 +23,16 @@ public class TransferenceController {
         return ResponseEntity.ok(transferServ.findAll());
     }
 
+    @GetMapping("/origin/{idO}")
+    ResponseEntity<List<Transference>>findAllByOrigin(@PathVariable("idO")Long idO){
+        return ResponseEntity.ok(transferServ.findAllByOrigin(idO));
+    }
+
+    @GetMapping("/destiny/{idD}")
+    ResponseEntity<List<Transference>>findAllByDestiny(@PathVariable("idD")Long idD){
+        return ResponseEntity.ok(transferServ.findAllByDestiny(idD));
+    }
+
     @GetMapping("/{idTr}")
     ResponseEntity<Transference>findById(@PathVariable("idTr")Long idTr){
         Optional<Transference>optTransf=transferServ.findById(idTr);
