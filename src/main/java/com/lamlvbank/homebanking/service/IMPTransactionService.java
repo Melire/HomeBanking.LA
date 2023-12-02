@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+// import java.util.Random;
 
 @Service
 public class IMPTransactionService implements TransactionService {
@@ -50,4 +51,13 @@ public class IMPTransactionService implements TransactionService {
         }
         return false;
     }
+
+    // private Long transactionNGen(){
+    //     Long transN = 0L;
+    //     Random random = new Random();
+    //     do{
+    //         transN = Math.abs(random.nextLong() % (999999999 + 1));
+    //     }while(tR.existsByTransN(transN));
+    // return transN;
+    // }
 }

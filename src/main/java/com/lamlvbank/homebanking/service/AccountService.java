@@ -15,6 +15,6 @@ public interface AccountService {
     public boolean deleteById(Long idA);
 
     public Account update(Account account);
-   
 
+    public void updateAmounts(Long idO,Long idD,float amount);
 }

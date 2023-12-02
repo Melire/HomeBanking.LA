@@ -20,7 +20,7 @@ public class ValidExceptionHandler {
         BindingResult bindingResult=ex.getBindingResult();
         List<FieldError> fieldErrors=bindingResult.getFieldErrors();
         String errorMessages=errorValidationBuilder(fieldErrors);
-        return ResponseEntity.badRequest().body(errorMessages);
+    return ResponseEntity.badRequest().body(errorMessages);
     }
 
     private String errorValidationBuilder(List<FieldError> fieldErrors){

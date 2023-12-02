@@ -20,5 +20,4 @@ public class AccountType {
     @Pattern(regexp ="^Account\\s([A-Za-z]+)$",message="Patron erroneo, debe ser Account [Palabra]")
     //@Length(min=8, max=40) combina @Notblank y @Size
     private String name;
-
 }

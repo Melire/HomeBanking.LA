@@ -2,6 +2,9 @@ package com.lamlvbank.homebanking.service;
 
 import com.lamlvbank.homebanking.model.Account;
 import com.lamlvbank.homebanking.repository.AccountRepository;
+import com.lamlvbank.homebanking.tool.exception.InsufficientBalanceException;
+import com.lamlvbank.homebanking.tool.exception.OriginOrDestinyNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,5 +62,34 @@ public class ImplAccountService implements AccountService {
         return account;
     }
 //Validar que el cbu y al numero de cuenta pertenezca a la misma entidad
+
+    @Override
+    public void updateAmounts(Long idO, Long idD,float amount){
+        Optional<Account> originAcc = accountRepo.findById(idO);
+        Optional<Account> destinyAcc = accountRepo.findById(idD);
+
+        if(originAcc.isPresent() && destinyAcc.isPresent()){
+            if(originAcc.get().getBalance() >= amount){
+                originAcc.get().setBalance(originAcc.get().getBalance() - amount);
+                destinyAcc.get().setBalance(destinyAcc.get().getBalance() + amount);
+                accountRepo.save(originAcc.get());
+                accountRepo.save(destinyAcc.get());
+            }else{
+                throw new InsufficientBalanceException("The origin account does not have sufficient balance to cover the operation.");
+            }
+        }else{
+            throw new OriginOrDestinyNotFoundException("One of the accounts involved in the operation is not available.");
+        }
+    }
+
+    // @Override
+    // public void updateAmounts(Long idO, Long idD,float amount) throws InsufficientBalanceException, OriginOrDestinyNotFoundException {
+    //     Optional<Account> originAcc = accountRepo.findById(idO);
+    //     Optional<Account> destinyAcc = accountRepo.findById(idD);
+    //             originAcc.get().setBalance(originAcc.get().getBalance() - amount);
+    //             destinyAcc.get().setBalance(destinyAcc.get().getBalance() + amount);
+    //             accountRepo.save(originAcc.get());
+    //             accountRepo.save(destinyAcc.get());
+    // }
 }
 

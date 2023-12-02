@@ -1,6 +1,5 @@
 package com.lamlvbank.homebanking.controller;
 
-import com.lamlvbank.homebanking.model.Transaction;
 import com.lamlvbank.homebanking.model.Transference;
 import com.lamlvbank.homebanking.model.dto.TransferenceDTO;
 import com.lamlvbank.homebanking.service.TransferenceService;
@@ -36,7 +35,6 @@ public class TransferenceController {
 
     @PostMapping
     ResponseEntity<Transference> save(@Valid @RequestBody Transference transference){
-        System.out.println(transference);
         Transference transferenceSaved = ts.save(transference);
         if (transferenceSaved != null){
             return ResponseEntity.status(HttpStatus.CREATED).body(transferenceSaved);
@@ -46,7 +44,7 @@ public class TransferenceController {
     }
 
     @PostMapping("/register")
-    ResponseEntity<Transference> register(@RequestBody TransferenceDTO dto){
+    ResponseEntity<Transference> register(@Valid @RequestBody TransferenceDTO dto){
         Transference transferenceSaved = ts.register(dto);
         if (transferenceSaved  != null){
             return ResponseEntity.status(HttpStatus.CREATED).body(transferenceSaved);

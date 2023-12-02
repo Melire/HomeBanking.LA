@@ -1,9 +1,7 @@
 package com.lamlvbank.homebanking.service;
 
-import com.lamlvbank.homebanking.model.Account;
 import com.lamlvbank.homebanking.model.Transference;
 import com.lamlvbank.homebanking.model.dto.TransferenceDTO;
-import com.lamlvbank.homebanking.repository.TransactionRepository;
 import com.lamlvbank.homebanking.repository.TransferenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +16,7 @@ public class IMPTransferenceService implements TransferenceService{
     private TransferenceRepository tR;
 
     @Autowired
-    private TransactionRepository trR;
-
-
+    private AccountService aS;
 
     @Override
     public List<Transference> findAll() {
@@ -34,25 +30,21 @@ public class IMPTransferenceService implements TransferenceService{
 
     @Override
     public Transference save(Transference transference) {
+        aS.updateAmounts(transference.getOrigin().getIdA(), transference.getDestiny().getIdA()
+                            ,transference.getAmount());
+            return tR.save(transference);   
+    }
+
+    @Override
+    public Transference register(TransferenceDTO dto){
+            Transference transference = new Transference();
+            transference.setTransferenceN(transferenceNGen());
+            transference.setReference(dto.getReference());
+            transference.setAmount(dto.getAmount());
+            transference.addOriginAcc(dto.getIdO());
+            transference.addDestinyAcc(dto.getIdD());
+            aS.updateAmounts(dto.getIdO(), dto.getIdD(), dto.getAmount());
         return tR.save(transference);
-    }
-
-    @Override
-    public Transference register(TransferenceDTO dto) {
-        Transference transference = new Transference();
-        transference.setTransN(transactionNGen());
-        transference.setTransferenceN(transferenceNGen());
-        transference.setReference(dto.getReference());
-        transference.setAmount(dto.getAmount());
-        transference.addOriginAcc(dto.getIdO());
-        transference.addDestinyAcc(dto.getIdD());
-
-    return tR.save(transference);
-    }
-
-    @Override
-    public Transference update(Transference transference) {
-        return null;
     }
 
     @Override
@@ -61,19 +53,10 @@ public class IMPTransferenceService implements TransferenceService{
             tR.deleteById(idT);
             return true;
         }
-        return false;
+    return false;
     }
 
-    private Long transactionNGen(){
-        Long transN = 0L;
-        Random random = new Random();
-        do{
-            transN = Math.abs(random.nextLong() % (999999999 + 1));
-        }while(trR.existsByTransN(transN));
-    return transN;
-    }
-
-
+//?Metodo AUXILIAR para generar el numero de transferencia.
     private Long transferenceNGen(){
         Long transfN = 0L;
         Random random = new Random();
