@@ -14,7 +14,6 @@ public class IMPTransactionService implements TransactionService {
     @Autowired
     private TransactionRepository tR;
 
-
     @Override
     public List<Transaction> findAll() {
         return tR.findAll();
@@ -34,13 +33,13 @@ public class IMPTransactionService implements TransactionService {
     }
 
     @Override
-    public Transaction update(Transaction tran) {
-        Optional<Transaction>optTransaction=tR.findByTransN(tran.getTransN());
+    public Transaction update(Transaction trans) {
+        Optional<Transaction>optTransaction=tR.findByTransN(trans.getTransN());
         if(optTransaction.isPresent()){
-            optTransaction.get().setAmount(tran.getAmount());
+            optTransaction.get().setAmount(trans.getAmount());
             return tR.save(optTransaction.get());  //retorna la entidad actualizada
         }
-        return tran; //si no hay cambios entonces retorna nuevamente lo anterior. lo que viene en el json.
+        return trans; //si no hay cambios entonces retorna nuevamente lo anterior. lo que viene en el json.
     }
 
     @Override

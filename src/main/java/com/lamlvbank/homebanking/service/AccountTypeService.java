@@ -9,6 +9,6 @@ public interface AccountTypeService {
     List <AccountType> findAll();
     Optional<AccountType> findById(Long idAt);
     AccountType save(AccountType accType);
-    AccountType update(AccountType accType);
+    // AccountType update(AccountType accType);
     boolean deleteById(Long idAt);
 }

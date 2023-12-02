@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface TransactionService {
     List<Transaction> findAll();
     Optional<Transaction> findById(Long idT);
-    Transaction save(Transaction tran);
-    Transaction update(Transaction tran);
+    Transaction save(Transaction trans);
+    Transaction update(Transaction trans);
     boolean deleteById(Long idT);
 }

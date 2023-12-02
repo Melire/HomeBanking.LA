@@ -53,14 +53,13 @@ public class TransferenceController {
         }
     }
 
+//? El método 'register' guarda una transferencia con información que llega a traves del DTO.  
+//? Dicho DTO tiene el propósito de proteger los id de la cuenta 'Origen' y 'Destino'.
+//! Posee un único return ya que en caso de fallar, actúa el ServicesExceptionHandler.
     @PostMapping("/register")
     ResponseEntity<Transference> register(@Valid @RequestBody TransferenceDTO dto){
         Transference transferenceSaved = transferServ.register(dto);
-        if (transferenceSaved  != null){
             return ResponseEntity.status(HttpStatus.CREATED).body(transferenceSaved);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
     }
 
     @DeleteMapping("/{idT}")

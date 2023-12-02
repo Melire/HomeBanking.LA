@@ -41,6 +41,7 @@ public class Account {
     private float balance;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("accounts")
     private AccountType accountType;
 
     @OneToMany(mappedBy = "origin", fetch = FetchType.EAGER)

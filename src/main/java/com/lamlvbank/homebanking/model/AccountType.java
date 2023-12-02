@@ -21,7 +21,7 @@ public class AccountType {
 
     @NotNull @NotBlank @Size(min = 8, max = 40)
     @Column(unique = true, nullable = false)
-    @Pattern(regexp = "^Account\\s([A-Za-z]+)$", message = "Patron erroneo, debe ser Account [Palabra]")
+    @Pattern(regexp = "^Account\\s([A-Za-z]+)$", message = "Patron erróneo, debe ser Account [Palabra]")
     //@Length(min=8, max=40) combina @Notblank y @Size
     private String name;
 
@@ -29,6 +29,5 @@ public class AccountType {
     private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "accountType")
-    private List<Account> account;
-
+    private List<Account> accounts;
 }
