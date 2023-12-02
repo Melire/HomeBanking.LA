@@ -16,16 +16,16 @@ import java.util.Optional;
 @RequestMapping("/apiHB/transferences")
 public class TransferenceController {
     @Autowired
-    private TransferenceService ts;
+    private TransferenceService transferServ;
 
     @GetMapping
     ResponseEntity<List<Transference>>findAll(){
-        return ResponseEntity.ok(ts.findAll());
+        return ResponseEntity.ok(transferServ.findAll());
     }
 
     @GetMapping("/{idTr}")
     ResponseEntity<Transference>findById(@PathVariable("idTr")Long idTr){
-        Optional<Transference>optTransf=ts.findById(idTr);
+        Optional<Transference>optTransf=transferServ.findById(idTr);
         if (optTransf.isPresent()) {
             return ResponseEntity.ok(optTransf.get());
         }else{
@@ -35,7 +35,7 @@ public class TransferenceController {
 
     @PostMapping
     ResponseEntity<Transference> save(@Valid @RequestBody Transference transference){
-        Transference transferenceSaved = ts.save(transference);
+        Transference transferenceSaved = transferServ.save(transference);
         if (transferenceSaved != null){
             return ResponseEntity.status(HttpStatus.CREATED).body(transferenceSaved);
         } else {
@@ -45,7 +45,7 @@ public class TransferenceController {
 
     @PostMapping("/register")
     ResponseEntity<Transference> register(@Valid @RequestBody TransferenceDTO dto){
-        Transference transferenceSaved = ts.register(dto);
+        Transference transferenceSaved = transferServ.register(dto);
         if (transferenceSaved  != null){
             return ResponseEntity.status(HttpStatus.CREATED).body(transferenceSaved);
         } else {
@@ -55,7 +55,7 @@ public class TransferenceController {
 
     @DeleteMapping("/{idT}")
     ResponseEntity<?> deleteById(@PathVariable("idT") Long idT) {
-        if (ts.deleteById(idT)) {
+        if (transferServ.deleteById(idT)) {
             return ResponseEntity.noContent().build();
         }else{
             return ResponseEntity.notFound().build();

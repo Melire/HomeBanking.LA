@@ -2,19 +2,15 @@ package com.lamlvbank.homebanking.service;
 
 import com.lamlvbank.homebanking.model.Account;
 import com.lamlvbank.homebanking.repository.AccountRepository;
-import com.lamlvbank.homebanking.tool.exception.InsufficientBalanceException;
-import com.lamlvbank.homebanking.tool.exception.OriginOrDestinyNotFoundException;
-
+import com.lamlvbank.homebanking.tool.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ImplAccountService implements AccountService {
-
-    // Inyeccion de dependencia del Repo
+    // Inyección de dependencia del Repo
     @Autowired
     private AccountRepository accountRepo;
 
@@ -30,11 +26,12 @@ public class ImplAccountService implements AccountService {
 
     @Override
     public Account save(Account account) {
-        if (!(accountRepo.existsByAccountN(account.getAccountN())) && !(accountRepo.existsByAlias(account.getAlias()))
+        if (!(accountRepo.existsByAccountN(account.getAccountN())) 
+                && !(accountRepo.existsByAlias(account.getAlias()))
                 && !(accountRepo.existsByCbu(account.getCbu()))) {
             return accountRepo.save(account);
         } else {
-            return null;
+            return account;
         }
     }
 
@@ -50,12 +47,11 @@ public class ImplAccountService implements AccountService {
 
     @Override
     public Account update(Account account) {
-        Optional<Account> accountToUpdate = accountRepo.findByAccountN(account.getAccountN());
+        Optional<Account> accountToUpdate = accountRepo.findByAccountNAndCbu(account.getAccountN()
+                                                                            ,account.getCbu());
         if (accountToUpdate.isPresent()) {
-
             accountToUpdate.get().setAlias(account.getAlias());
             accountToUpdate.get().setBalance(account.getBalance());
-
             Account accountUpdated = accountRepo.save(accountToUpdate.get());
             return accountUpdated;
         }
@@ -81,15 +77,5 @@ public class ImplAccountService implements AccountService {
             throw new OriginOrDestinyNotFoundException("One of the accounts involved in the operation is not available.");
         }
     }
-
-    // @Override
-    // public void updateAmounts(Long idO, Long idD,float amount) throws InsufficientBalanceException, OriginOrDestinyNotFoundException {
-    //     Optional<Account> originAcc = accountRepo.findById(idO);
-    //     Optional<Account> destinyAcc = accountRepo.findById(idD);
-    //             originAcc.get().setBalance(originAcc.get().getBalance() - amount);
-    //             destinyAcc.get().setBalance(destinyAcc.get().getBalance() + amount);
-    //             accountRepo.save(originAcc.get());
-    //             accountRepo.save(destinyAcc.get());
-    // }
 }
 

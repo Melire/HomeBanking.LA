@@ -6,9 +6,7 @@ import com.lamlvbank.homebanking.repository.TransferenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class IMPTransferenceService implements TransferenceService{
@@ -16,7 +14,7 @@ public class IMPTransferenceService implements TransferenceService{
     private TransferenceRepository tR;
 
     @Autowired
-    private AccountService aS;
+    private AccountService accServ;
 
     @Override
     public List<Transference> findAll() {
@@ -30,9 +28,9 @@ public class IMPTransferenceService implements TransferenceService{
 
     @Override
     public Transference save(Transference transference) {
-        aS.updateAmounts(transference.getOrigin().getIdA(), transference.getDestiny().getIdA()
+        accServ.updateAmounts(transference.getOrigin().getIdA(), transference.getDestiny().getIdA()
                             ,transference.getAmount());
-            return tR.save(transference);   
+        return tR.save(transference);   
     }
 
     @Override
@@ -43,7 +41,7 @@ public class IMPTransferenceService implements TransferenceService{
             transference.setAmount(dto.getAmount());
             transference.addOriginAcc(dto.getIdO());
             transference.addDestinyAcc(dto.getIdD());
-            aS.updateAmounts(dto.getIdO(), dto.getIdD(), dto.getAmount());
+            accServ.updateAmounts(dto.getIdO(), dto.getIdD(), dto.getAmount());
         return tR.save(transference);
     }
 
@@ -56,7 +54,7 @@ public class IMPTransferenceService implements TransferenceService{
     return false;
     }
 
-//?Metodo AUXILIAR para generar el numero de transferencia.
+//? Método AUXILIAR para generar el numero de transferencia.
     private Long transferenceNGen(){
         Long transfN = 0L;
         Random random = new Random();

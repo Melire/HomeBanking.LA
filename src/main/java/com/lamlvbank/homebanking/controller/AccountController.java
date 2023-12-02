@@ -15,18 +15,18 @@ import java.util.Optional;
 @RequestMapping("/apiHB/accounts")
 public class AccountController {
     @Autowired
-    private AccountService accountServ;
+    private AccountService accServ;
 
     //FIND ALL ACCOUNTS
     @GetMapping
     ResponseEntity<List<Account>> findAll() {
-        return ResponseEntity.ok().body(accountServ.findAll());
+        return ResponseEntity.ok().body(accServ.findAll());
     }
 
     //FIND ACCOUNT BY ID
     @GetMapping("/{idA}")
     ResponseEntity<Account> findById(@PathVariable("idA") Long idA) {
-        Optional<Account> optAccount = accountServ.findById(idA);
+        Optional<Account> optAccount = accServ.findById(idA);
         if (optAccount.isPresent()) {
             return ResponseEntity.ok().body(optAccount.get());
         } else {
@@ -37,18 +37,19 @@ public class AccountController {
     //CREATE ACCOUNT
     @PostMapping
     ResponseEntity<Account> save(@Valid @RequestBody Account account) {
-        Account accSaved = accountServ.save(account);
-        if (accSaved != null) {
+        Account accSaved = accServ.save(account);
+        if (accSaved.getIdA()!= null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(accSaved);
         } else {
             return ResponseEntity.badRequest().build();
         }
-
     }
+    
     //UPDATE ACCOUNT
+    //* Aplica solo para actualizar el ALIAS.
     @PutMapping
     ResponseEntity<Account> update(@Valid @RequestBody Account account) {
-        Account accUpdated = accountServ.update(account);
+        Account accUpdated = accServ.update(account);
         if (accUpdated.getIdA()!=null){
             return ResponseEntity.ok(accUpdated);
         }else {
@@ -59,7 +60,7 @@ public class AccountController {
     //DELETE ACCOUNT
     @DeleteMapping("/{idA}")
     ResponseEntity<?> deleteById(@PathVariable("idA") Long idA) {
-        if (accountServ.deleteById(idA)) {
+        if (accServ.deleteById(idA)) {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
