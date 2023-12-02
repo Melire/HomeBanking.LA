@@ -3,6 +3,7 @@ package com.lamlvbank.homebanking.service;
 import com.lamlvbank.homebanking.model.Account;
 import com.lamlvbank.homebanking.model.User;
 import com.lamlvbank.homebanking.repository.UserRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +15,9 @@ import java.util.Optional;
 @Service
 public class IMPUserService implements UserService{
 
+
     @Autowired
-    private UserRepository userTR;
+    private  UserRepository userTR;
 
     @Autowired
     private AccountService accSer;
@@ -72,6 +74,7 @@ indexar ambas entidades (asociar cuenta con usuario y usuario con cuenta)
             userToUpdate.get().setBirthdate(user.getBirthdate());
             //userToUpdate.get().setLastModifyDate(LocalDateTime.now());
             User userUpdated = userTR.save(userToUpdate.get());
+
             //return userUpdated;
             return userTR.findByDni(user.getDni()).get();
         }

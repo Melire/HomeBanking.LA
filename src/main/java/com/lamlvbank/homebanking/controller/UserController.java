@@ -2,18 +2,26 @@ package com.lamlvbank.homebanking.controller;
 
 import com.lamlvbank.homebanking.model.User;
 import com.lamlvbank.homebanking.service.UserService;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/apiHB/users")
+@Transactional
 public class UserController {
+
+    @Autowired
+    private EntityManager em;
+
     @Autowired
     private UserService uS;
     @GetMapping
@@ -77,8 +85,9 @@ public class UserController {
         }
     }
     @PutMapping()
-    ResponseEntity<User> update(@Valid @RequestBody  User user){
+    ResponseEntity<User> update(@Valid @RequestBody  User user)throws URISyntaxException {
             User userUpdated = uS.update(user);
+            em.refresh(userUpdated);
         if (!userUpdated.equals(user)){
                 return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
             } else {
