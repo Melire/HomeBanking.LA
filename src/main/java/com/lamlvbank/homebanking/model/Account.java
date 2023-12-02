@@ -40,6 +40,9 @@ public class Account {
     @DecimalMax(value = "20000000.0")
     private float balance;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private AccountType accountType;
+
     @OneToMany(mappedBy = "origin", fetch = FetchType.EAGER)
     @JsonIgnoreProperties("account")
     private List<Transaction> transactions;
@@ -51,5 +54,11 @@ public class Account {
     public Account(){
         this.transactions = new ArrayList<>();
         this.transferences = new ArrayList<>();
+    }
+
+    public void addType(Long idAT) {
+        AccountType accType = new AccountType();
+        accType.setIdAT(idAT);
+        this.setAccountType(accType);
     }
 }
