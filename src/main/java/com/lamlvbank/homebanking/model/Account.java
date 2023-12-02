@@ -1,10 +1,12 @@
 package com.lamlvbank.homebanking.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,9 +42,19 @@ public class Account {
     @DecimalMax(value = "20000000.0")
     private float balance;
 
+    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    private LocalDateTime created_at;
+
+    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    private LocalDateTime updated_at; //? Agregue created_at y updated_at para dejar registro de cambios.
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties("accounts")
     private AccountType accountType;
+      
+    @ManyToOne
+    @JsonIgnoreProperties("accounts")
+    private Currency currency;
 
     @OneToMany(mappedBy = "origin", fetch = FetchType.EAGER)
     @JsonIgnoreProperties("account")
@@ -55,6 +67,12 @@ public class Account {
     public Account(){
         this.transactions = new ArrayList<>();
         this.transferences = new ArrayList<>();
+    }
+
+    public void addCurrency(Long idC) {
+        Currency currency = new Currency();
+        currency.setIdC(idC);
+        this.setCurrency(currency);
     }
 
     public void addType(Long idAT) {
