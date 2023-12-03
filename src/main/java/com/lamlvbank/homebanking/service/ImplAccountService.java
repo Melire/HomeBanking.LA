@@ -66,8 +66,8 @@ public class ImplAccountService implements AccountService {
     @Override
     public AccountDto openAccount(AccountDto dto) {
         Account account = generateAccount();
-        account.addType(dto.getIdT());//Agregado de la rama de Meli
-        account.addCurrency(dto.getIdC());//Agregado de la rama de Pedro
+        account.addType(dto.getIdT());// Agregado de la rama de Meli
+        account.addCurrency(dto.getIdC());// Agregado de la rama de Pedro
         dto = AccountMapper.accountToDto(accountRepo.save(account));
         return dto;
     }
@@ -81,14 +81,13 @@ public class ImplAccountService implements AccountService {
         return false;
     }
 
-    // Linea 58 setee la fecha y hora actual en la que se modifico
     @Override
     public Account update(Account account) {
         Optional<Account> accountToUpdate = accountRepo.findByAccountN(account.getAccountN());
         if (accountToUpdate.isPresent()) {
             accountToUpdate.get().setAlias(account.getAlias());
             accountToUpdate.get().setBalance(account.getBalance());
-            accountToUpdate.get().setLastModifyDT(LocalDateTime.now());
+            accountToUpdate.get().setLastModifyDT(LocalDateTime.now());// guarda la fecha y hora actual de modificación
             Account accountUpdated = accountRepo.save(accountToUpdate.get());
             return accountUpdated;
         }

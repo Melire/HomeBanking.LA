@@ -19,8 +19,8 @@ public class AccountController {
     private AccountService accountServ;
 
     /*
-     * Se usa Dto por que el front no se puede usar informacion sensible, por
-     * cuestion de seguridad
+     * Se usa Dto por que el front no se puede usar información sensible, por
+     * cuestión de seguridad
      */
     // FIND ALL ACCOUNTS
     @GetMapping
@@ -43,7 +43,7 @@ public class AccountController {
     @PostMapping("/{idAT}/{idC}")
     ResponseEntity<Account> save(@Valid @RequestBody Account account, @PathVariable("idAT") Long idAT,
             @PathVariable("idC") Long idC) {
-        account.addType(idAT);
+        account.addType(idAT); //Agregado de Meli
         account.addCurrency(idC);//Agregado de pedro
         Account accSaved = accountServ.save(account);
         if (accSaved != null) {
