@@ -15,6 +15,7 @@ public class AccountMapper {
         dto.setBalance(account.getBalance());
         dto.setIdAT(account.getAccountType().getIdAT());
         dto.setIdC(account.getCurrency().getIdC());
+        dto.setIdU(account.getUser().getIdU());
     return dto;    
     //* Construir DTO con BUILDER de lombok.
     //? Opción 1.
@@ -47,6 +48,7 @@ public class AccountMapper {
         account.setBalance(dto.getBalance());
         account.addType(dto.getIdAT());
         account.addCurrency(dto.getIdC());
+        account.addUser(dto.getIdU());
         return account;
     }
 }

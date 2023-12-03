@@ -43,6 +43,7 @@ public class AccountTypeController {
 
     }
 
+//! Se comento 'update' ya que no corresponde a la lógica de negocio de nuestra API.    
     // @PutMapping ("/{idAT}")
     // ResponseEntity<AccountType> update(@Valid @RequestBody AccountType accountType
     //                                     ,@PathVariable("idAT") Long idAT) {

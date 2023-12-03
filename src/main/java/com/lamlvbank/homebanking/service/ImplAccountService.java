@@ -47,7 +47,7 @@ public class ImplAccountService implements AccountService {
 //? A excepción de las relaciones con Entidades, se lleva a cabo mediante los 'add'.
     @Override
     public AccountDTO openAccount(AccountDTO dto) {
-        Account account = generateAccount(dto.getIdAT(),dto.getIdC());
+        Account account = generateAccount(dto.getIdAT(),dto.getIdC(),dto.getIdU());
         dto = AccountMapper.accountToDto(accountRepo.save(account));
     return dto;
     }
@@ -102,7 +102,7 @@ public class ImplAccountService implements AccountService {
 
 //? Métodos de Soporte. Limitada a la capa SERVICE, sin contacto con los Controllers.
     @Override
-    public Account generateAccount(Long idAT, Long idC) {
+    public Account generateAccount(Long idAT, Long idC,Long idU) {
         Account account = new Account();
         account.setAccountN(genAccNumber());
         account.setCbu(genCBU());
@@ -112,6 +112,9 @@ public class ImplAccountService implements AccountService {
         account.setLastModifyDate(LocalDateTime.now());
         account.addType(idAT);
         account.addCurrency(idC);
+        if(idU != 0){
+            account.addUser(idU);
+        }
     return account;
     }
     

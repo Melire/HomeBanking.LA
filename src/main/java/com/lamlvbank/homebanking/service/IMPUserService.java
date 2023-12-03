@@ -53,13 +53,13 @@ public class IMPUserService implements UserService {
     }
 
     /*
-     * generar usuario (ser recibe por parametros)
+     * generar usuario (ser recibe por parámetro)
      * generar cuenta
      * indexar ambas entidades (asociar cuenta con usuario y usuario con cuenta)
      */
     @Override
     public User register(User user) {
-        Account account = accSer.generateAccount(1L,1L);
+        Account account = accSer.generateAccount(1L,1L,0L);
         user.setPassword(passEnc.encode(user.getPassword()));
         account.setUser(user);
         user.getAccounts().add(account);

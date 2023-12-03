@@ -14,4 +14,5 @@ public class AccountDTO {
     private float balance;
     private Long idAT;
     private Long idC;
+    private Long idU;
 }

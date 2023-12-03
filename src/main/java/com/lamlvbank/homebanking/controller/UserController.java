@@ -57,8 +57,9 @@ public class UserController {
         }
     }
 
+//? El método 'register' lleva un proceso distinto en el SERVICE al usado en el método 'save'.
     @PostMapping("/register")
-    ResponseEntity <?> register(@Valid @RequestBody User user){
+    ResponseEntity<User> register(@Valid @RequestBody User user){
         User userRegister = uS.register(user);
         if (userRegister.getIdU() !=null){
             return ResponseEntity.status(HttpStatus.CREATED).body(userRegister);
@@ -76,6 +77,17 @@ public class UserController {
         }
     }
 
+    @PutMapping()
+    ResponseEntity<User> update(@Valid @RequestBody  User user)throws URISyntaxException {
+        User userUpdated = uS.update(user);
+        em.refresh(userUpdated);
+        if (!userUpdated.equals(user)){
+                return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
+        } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(user);
+        }
+    }
+
     @DeleteMapping("/dni/{dniU}")
     ResponseEntity<?> deleteByDni(@PathVariable("dniU")String dniU){
         if (uS.deleteByDni(dniU)){
@@ -84,15 +96,4 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @PutMapping()
-    ResponseEntity<User> update(@Valid @RequestBody  User user)throws URISyntaxException {
-            User userUpdated = uS.update(user);
-            em.refresh(userUpdated);
-        if (!userUpdated.equals(user)){
-                return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(user);
-            }
-        }
 }

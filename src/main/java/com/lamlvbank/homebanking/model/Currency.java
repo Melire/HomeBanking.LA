@@ -19,9 +19,9 @@ public class Currency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idC;
-
-    @Column(unique = true, nullable = false)
+    
     @NotNull @Length(min = 3, max = 3)
+    @Column(unique = true, nullable = false)
     private String name;
 
     @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
