@@ -4,6 +4,7 @@ import com.lamlvbank.homebanking.model.Account;
 import com.lamlvbank.homebanking.model.dto.AccountDTO;
 import com.lamlvbank.homebanking.model.mapper.AccountMapper;
 import com.lamlvbank.homebanking.repository.AccountRepository;
+import com.lamlvbank.homebanking.repository.TransferenceRepository;
 import com.lamlvbank.homebanking.tool.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,19 @@ public class ImplAccountService implements AccountService {
     @Autowired
     private AccountRepository accountRepo;
 
+    @Autowired
+    private TransferenceRepository tR;
+
+
+//? Utilizamos lambda para poder rellenar las transferencias de aquellas cuentas que son 'DESTINY'.  
+//? Ya que la relación establecida en 'Transference' mapea a una sola propiedad('ORIGIN').
     @Override
     public List<Account> findAll() {
-        return accountRepo.findAll();
+        List<Account> accounts = accountRepo.findAll();    
+        accounts.forEach(account -> account.setTransferences(
+            account.getTransferences().isEmpty() ? 
+                tR.findAllByDestinyIdA(account.getIdA()) : account.getTransferences()));   
+        return accounts;
     }
 
     @Override
