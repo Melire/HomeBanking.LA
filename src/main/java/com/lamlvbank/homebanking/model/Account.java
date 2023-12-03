@@ -48,15 +48,19 @@ public class Account {
     private LocalDateTime creationDate;
 
     @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime lastModifyDate; 
+    private LocalDateTime lastModifyDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties("accounts")
     private AccountType accountType;
-      
+
     @ManyToOne
     @JsonIgnoreProperties("accounts")
     private Currency currency;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("accounts")
+    private User user;
 
     @OneToMany(mappedBy = "origin", fetch = FetchType.EAGER)
     @JsonIgnoreProperties("account")
@@ -66,7 +70,7 @@ public class Account {
     @JsonIgnoreProperties("account")
     private List<Transference> transferences;
 
-    public Account(){
+    public Account() {
         this.transactions = new ArrayList<>();
         this.transferences = new ArrayList<>();
     }
@@ -81,5 +85,11 @@ public class Account {
         AccountType accType = new AccountType();
         accType.setIdAT(idAT);
         this.setAccountType(accType);
+    }
+
+    public void addUser(Long idU) {
+        User userAdd = new User();
+        userAdd.setIdU(idU);
+        this.setUser(userAdd);
     }
 }

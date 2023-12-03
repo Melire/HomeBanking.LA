@@ -114,7 +114,8 @@ public class ImplAccountService implements AccountService {
         account.setLastModifyDate(LocalDateTime.now());
         return account;
     }
-
+    
+//! Los generadores jamas soltaran un valor que ya este almacenado en la BDD, son ÚNICOS.    
 //? Generador de Numero de Cuenta RANDOM.
     private String genAccNumber() {
         Long accNumberAux = 0L;
