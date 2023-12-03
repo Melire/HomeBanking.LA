@@ -50,10 +50,10 @@ public class AccountController {
         }
     }
 
-    //? Método dedicado a la apertura de una cuenta nueva para un usuario, enviado desde el front.
-    //? Se aplica DTO por 2 razones fundamentales:
-    //?     *Seguridad de los ID de las entidades INDISPENSABLES para la apertura de la cuenta.
-    //?     *Facilidad de organización de datos a enviar desde el FrontEnd.
+//? Método dedicado a la apertura de una cuenta nueva para un usuario, enviado desde el front.
+//? Se aplica DTO por 2 razones fundamentales:
+//?     *Seguridad de los ID de las entidades INDISPENSABLES para la apertura de la cuenta.
+//?     *Facilidad de organización de datos a enviar desde el FrontEnd.
     @PostMapping("/new")
     ResponseEntity<AccountDTO> openAccount(@Valid @RequestBody AccountDTO dto) {
         AccountDTO accSaved = accServ.openAccount(dto);
@@ -65,7 +65,7 @@ public class AccountController {
     }
     
     //UPDATE ACCOUNT
-    //* Aplica solo para actualizar el ALIAS.
+//* Aplica solo para actualizar el ALIAS.
     @PutMapping
     ResponseEntity<Account> update(@Valid @RequestBody Account account) {
         Account accUpdated = accServ.update(account);

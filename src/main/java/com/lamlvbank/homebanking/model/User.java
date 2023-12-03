@@ -12,49 +12,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-//@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "idU")
 public class User {
- @Id
- @GeneratedValue(strategy = GenerationType.IDENTITY)
- private Long idU;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idU;
 
- @NonNull @NotBlank @Size(min=3, max=40)
- //@Length(min=3, max=40) combina funciones de @NotBlank y @Size
- @Column(nullable = false)
- private String name;
+    @NonNull
+    @NotBlank
+    @Size(min = 3, max = 40)
+    // @Length(min=3, max=40) combina funciones de @NotBlank y @Size
+    @Column(nullable = false)
+    private String name;
 
- @NonNull @NotBlank @Size(min=3, max=40)
- @Column(nullable = false)
- private String surname;
+    @NonNull
+    @NotBlank
+    @Size(min = 3, max = 40)
+    @Column(nullable = false)
+    private String surname;
 
- @NonNull @NotBlank @Size(min=6, max=240)
- private String password;
+    @NonNull
+    @NotBlank
+    @Size(min = 8, max = 10)
+    @Column(nullable = false, unique = true)
+    private String dni;
 
- @NonNull @NotBlank @Size(min=8, max=10)
- @Column(nullable = false, unique = true)
- private String dni;
+    @NonNull
+    @NotBlank
+    @Size(min = 6, max = 240)
+    private String password;
 
- @NonNull
- @Column(nullable = false)
- private LocalDate birthdate;
+    @NonNull
+    @Column(nullable = false)
+    private LocalDate birthdate;
 
- @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = JsonFormat.Shape.STRING)
- private LocalDateTime creationDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    private LocalDateTime creationDate;
 
- @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",shape = JsonFormat.Shape.STRING)
- private LocalDateTime lastModifyDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    private LocalDateTime lastModifyDate;
 
- @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
- //@JsonBackReference
- private List<Account> accounts;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
+    private List<Account> accounts;
 
- public User (){
-   this.accounts = new ArrayList<>();
-  }
-
+    public User() {
+        this.accounts = new ArrayList<>();
+    }
 }

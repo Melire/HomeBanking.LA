@@ -1,6 +1,8 @@
 package com.lamlvbank.homebanking.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -26,5 +28,6 @@ public class Currency {
     private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "currency")
+    @JsonIgnoreProperties("currency")
     private List<Account> accounts;
 }

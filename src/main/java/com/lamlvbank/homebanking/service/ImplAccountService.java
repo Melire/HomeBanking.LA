@@ -47,9 +47,7 @@ public class ImplAccountService implements AccountService {
 //? A excepción de las relaciones con Entidades, se lleva a cabo mediante los 'add'.
     @Override
     public AccountDTO openAccount(AccountDTO dto) {
-        Account account = generateAccount();
-        account.addType(dto.getIdAT());
-        account.addCurrency(dto.getIdC());
+        Account account = generateAccount(dto.getIdAT(),dto.getIdC());
         dto = AccountMapper.accountToDto(accountRepo.save(account));
     return dto;
     }
@@ -104,7 +102,7 @@ public class ImplAccountService implements AccountService {
 
 //? Métodos de Soporte. Limitada a la capa SERVICE, sin contacto con los Controllers.
     @Override
-    public Account generateAccount() {
+    public Account generateAccount(Long idAT, Long idC) {
         Account account = new Account();
         account.setAccountN(genAccNumber());
         account.setCbu(genCBU());
@@ -112,7 +110,9 @@ public class ImplAccountService implements AccountService {
         account.setBalance(0f);
         account.setCreationDate(LocalDateTime.now());
         account.setLastModifyDate(LocalDateTime.now());
-        return account;
+        account.addType(idAT);
+        account.addCurrency(idC);
+    return account;
     }
     
 //! Los generadores jamas soltaran un valor que ya este almacenado en la BDD, son ÚNICOS.    

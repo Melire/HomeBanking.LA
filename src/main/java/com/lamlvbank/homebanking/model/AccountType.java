@@ -1,6 +1,8 @@
 package com.lamlvbank.homebanking.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -29,5 +31,6 @@ public class AccountType {
     private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "accountType")
+    @JsonIgnoreProperties("accountType")
     private List<Account> accounts;
 }

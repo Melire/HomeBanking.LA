@@ -15,5 +15,5 @@ public interface AccountService {
     public Account update(Account account);
     public void updateAmounts(Long idO,Long idD,float amount);
 
-    public Account generateAccount();
+    public Account generateAccount(Long idAT,Long idC);
 }

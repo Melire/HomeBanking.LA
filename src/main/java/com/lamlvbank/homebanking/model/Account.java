@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +30,9 @@ public class Account {
     @Column(unique = true, nullable = false)
     private String cbu;
 
+//? '@Patter' se usa para definir un patron o forma especifica en la que se compone el String
+//? Utiliza expresiones regulares para lograrlo(regexp),para este caso,toma 3 fundamentos:
+//?     *Son 3 palabras.//Cada una de ellas solo en minúscula.//Separadas por un '.'
     @NotNull
     @NotBlank
     @Pattern(regexp = "^[a-z]+\\.[a-z]+\\.[a-z]+$", message = "Debe ser 3 palabras en minúsculas separadas por puntos")
@@ -54,7 +56,7 @@ public class Account {
     @JsonIgnoreProperties("accounts")
     private AccountType accountType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties("accounts")
     private Currency currency;
 

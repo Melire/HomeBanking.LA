@@ -3,7 +3,6 @@ package com.lamlvbank.homebanking.controller;
 import com.lamlvbank.homebanking.model.User;
 import com.lamlvbank.homebanking.service.UserService;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,18 +15,18 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/apiHB/users")
-@Transactional
 public class UserController {
-
     @Autowired
     private EntityManager em;
 
     @Autowired
     private UserService uS;
+
     @GetMapping
     ResponseEntity<List<User>> findAll() {
       return ResponseEntity.ok(uS.findAll());
     }
+
     @GetMapping("/{idU}")
     ResponseEntity<User> findById(@PathVariable("idU")Long idU){
         Optional<User> optUser=uS.findById(idU);
@@ -39,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/dni/{dniU}")
-    ResponseEntity<User> findBydni(@PathVariable("dniU")String dniU){
+    ResponseEntity<User> findByDni(@PathVariable("dniU")String dniU){
         Optional<User> optUser=uS.findByDni(dniU);
         if (optUser.isPresent()){
             return ResponseEntity.ok(optUser.get());
@@ -47,10 +46,11 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @PostMapping
     ResponseEntity<User> save(@Valid @RequestBody User user){
         User userSaved = uS.save(user);
-        if (userSaved !=null){
+        if (userSaved.getIdU() !=null){
             return ResponseEntity.status(HttpStatus.CREATED).body(userSaved);
         } else {
             return ResponseEntity.badRequest().build();
@@ -65,7 +65,6 @@ public class UserController {
         } else {
             return ResponseEntity.badRequest().build();
         }
-
     }
 
     @DeleteMapping("/{idU}")
@@ -76,6 +75,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @DeleteMapping("/dni/{dniU}")
     ResponseEntity<?> deleteByDni(@PathVariable("dniU")String dniU){
         if (uS.deleteByDni(dniU)){
@@ -84,6 +84,7 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @PutMapping()
     ResponseEntity<User> update(@Valid @RequestBody  User user)throws URISyntaxException {
             User userUpdated = uS.update(user);
