@@ -42,11 +42,13 @@ public class Account {
     @DecimalMax(value = "20000000.0")
     private float balance;
 
+//? 'creationDate' y 'lastModifyDate' entran en juego para registrar los cambios de la entidad.
+//? '@JsonFormat' declara un patron/formato para recuperar los datos de la BDD.
     @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime created_at;
+    private LocalDateTime creationDate;
 
     @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime updated_at; //? Agregue created_at y updated_at para dejar registro de cambios.
+    private LocalDateTime lastModifyDate; 
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties("accounts")

@@ -1,6 +1,7 @@
 package com.lamlvbank.homebanking.controller;
 
 import com.lamlvbank.homebanking.model.Account;
+import com.lamlvbank.homebanking.model.dto.AccountDTO;
 import com.lamlvbank.homebanking.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,13 +48,27 @@ public class AccountController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    //? Método dedicado a la apertura de una cuenta nueva para un usuario, enviado desde el front.
+    //? Se aplica DTO por 2 razones fundamentales:
+    //?     *Seguridad de los ID de las entidades INDISPENSABLES para la apertura de la cuenta.
+    //?     *Facilidad de organización de datos a enviar desde el FrontEnd.
+    @PostMapping("/new")
+    ResponseEntity<AccountDTO> openAccount(@Valid @RequestBody AccountDTO dto) {
+        AccountDTO accSaved = accServ.openAccount(dto);
+        if (accSaved != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(accSaved);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
     
     //UPDATE ACCOUNT
     //* Aplica solo para actualizar el ALIAS.
     @PutMapping
     ResponseEntity<Account> update(@Valid @RequestBody Account account) {
         Account accUpdated = accServ.update(account);
-        if (accUpdated.getIdA()!=null){
+        if (accUpdated.getIdA() != null){
             return ResponseEntity.ok(accUpdated);
         }else {
             return ResponseEntity.notFound().build();
