@@ -55,12 +55,12 @@ public class AccountController {
 //?     *Seguridad de los ID de las entidades INDISPENSABLES para la apertura de la cuenta.
 //?     *Facilidad de organización de datos a enviar desde el FrontEnd.
     @PostMapping("/new")
-    ResponseEntity<AccountDTO> openAccount(@Valid @RequestBody AccountDTO dto) {
-        AccountDTO accSaved = accServ.openAccount(dto);
-        if (accSaved != null) {
+    ResponseEntity<Account> openAccount(@Valid @RequestBody AccountDTO dto) {
+        Account accSaved = accServ.openAccount(dto);
+        if (accSaved.getIdA() != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(accSaved);
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
     }
     

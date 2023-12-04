@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-
     List<User> findAll();
     Optional<User> findById(Long idU);
     Optional<User> findByDni(String dniU);
@@ -14,5 +13,4 @@ public interface UserService {
     User update(User user);
     boolean deleteById(Long idU);
     boolean deleteByDni(String dniU);
-
 }

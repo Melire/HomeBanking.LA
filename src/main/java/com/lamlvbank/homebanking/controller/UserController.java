@@ -3,10 +3,12 @@ package com.lamlvbank.homebanking.controller;
 import com.lamlvbank.homebanking.model.User;
 import com.lamlvbank.homebanking.service.UserService;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
@@ -15,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/apiHB/users")
+@Transactional
 public class UserController {
     @Autowired
     private EntityManager em;
@@ -68,16 +71,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{idU}")
-    ResponseEntity<?> deleteById(@PathVariable("idU")Long idU){
-        if (uS.deleteById(idU)){
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PutMapping()
+    @PutMapping
     ResponseEntity<User> update(@Valid @RequestBody  User user)throws URISyntaxException {
         User userUpdated = uS.update(user);
         em.refresh(userUpdated);
@@ -85,6 +79,15 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
         } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(user);
+        }
+    }
+
+    @DeleteMapping("/{idU}")
+    ResponseEntity<?> deleteById(@PathVariable("idU")Long idU){
+        if (uS.deleteById(idU)){
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 

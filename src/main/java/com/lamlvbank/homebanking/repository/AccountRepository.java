@@ -10,6 +10,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     public boolean existsByAccountN(String accountN);
     public boolean existsByCbu(String cbu);
     public boolean existsByAlias(String alias);
+    public boolean existsByUserIdU(Long idU);
     public Optional<Account> findByAccountN(String accountN);
     public Optional<Account> findByAccountNAndCbu(String accountN,String cbu);
 }

@@ -69,7 +69,8 @@ public class IMPUserService implements UserService {
             userToUpdate.get().setSurname(user.getSurname());
             // userToUpdate.get().setPassword(user.getPassword());
             userToUpdate.get().setPassword(this.passEnc.encode(user.getPassword()));
-            userToUpdate.get().setBirthdate(user.getBirthdate());
+            userToUpdate.get().setBirthdate((user.getBirthdate()!=null)?
+                                user.getBirthdate() : userToUpdate.get().getBirthdate());
             // userToUpdate.get().setLastModifyDate(LocalDateTime.now());
             userTR.save(userToUpdate.get());
 

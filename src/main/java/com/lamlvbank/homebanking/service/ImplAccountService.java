@@ -2,10 +2,10 @@ package com.lamlvbank.homebanking.service;
 
 import com.lamlvbank.homebanking.model.Account;
 import com.lamlvbank.homebanking.model.dto.AccountDTO;
-import com.lamlvbank.homebanking.model.mapper.AccountMapper;
 import com.lamlvbank.homebanking.repository.AccountRepository;
 import com.lamlvbank.homebanking.repository.TransferenceRepository;
 import com.lamlvbank.homebanking.tool.exception.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,6 @@ public class ImplAccountService implements AccountService {
 
     @Autowired
     private TransferenceRepository tR;
-
 
 //? Utilizamos lambda para poder rellenar las transferencias de aquellas cuentas que son 'DESTINY'.  
 //? Ya que la relación establecida en 'Transference' mapea a una sola propiedad('ORIGIN').
@@ -56,11 +55,28 @@ public class ImplAccountService implements AccountService {
 //? Toda la información de la cuenta es generada por los 'Métodos de Soporte'.
 //? A excepción de las relaciones con Entidades, se lleva a cabo mediante los 'add'.
     @Override
-    public AccountDTO openAccount(AccountDTO dto) {
+    public Account openAccount(AccountDTO dto) {
         Account account = generateAccount(dto.getIdAT(),dto.getIdC(),dto.getIdU());
-        dto = AccountMapper.accountToDto(accountRepo.save(account));
-    return dto;
+        if(account.getUser() != null){
+            return accountRepo.save(account);
+        }
+        return account;
     }
+
+//! Disponible solo para cambiar atributo 'alias'.    
+    @Override
+    public Account update(Account account) {
+        Optional<Account> accountToUpdate = accountRepo.findByAccountNAndCbu(account.getAccountN()
+                                                                            ,account.getCbu());
+        if (accountToUpdate.isPresent()) {
+            accountToUpdate.get().setAlias(account.getAlias());
+            //! accountToUpdate.get().setLastModifyDate(LocalDateTime.now()); Dato actualizado por trigger.
+            accountRepo.save(accountToUpdate.get());
+        return accountRepo.findByAccountNAndCbu(account.getAccountN(),account.getCbu()).orElseThrow();
+        }
+    return account;
+    }
+
 
     @Override
     public boolean deleteById(Long idA) {
@@ -69,44 +85,6 @@ public class ImplAccountService implements AccountService {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public Account update(Account account) {
-        Optional<Account> accountToUpdate = accountRepo.findByAccountNAndCbu(account.getAccountN()
-                                                                            ,account.getCbu());
-        if (accountToUpdate.isPresent()) {
-            accountToUpdate.get().setAlias(account.getAlias());
-            accountToUpdate.get().setBalance(account.getBalance());
-            accountToUpdate.get().setLastModifyDate(LocalDateTime.now());
-            Account accountUpdated = accountRepo.save(accountToUpdate.get());
-        return accountUpdated;
-        }
-    return account;
-    }
-
-//? Método encargado de la actualización de montos durante una operación 'Transference'.
-//! En caso de no pasar el primer if, 'OriginOrDestinyNotFoundException' forzara una excepción.
-//! En caso de no pasar el segundo if, 'InsufficientBalanceException' forzara una excepción.
-//!! En ambos casos, trabajaran conjunto al ServiceExceptionHandler para llevar una respuestas ...
-//!! ... declarativas hacia afuera de la api,tomando un 'atajo' fuera de ella.
-    @Override
-    public void updateAmounts(Long idO, Long idD,float amount){
-        Optional<Account> originAcc = accountRepo.findById(idO);
-        Optional<Account> destinyAcc = accountRepo.findById(idD);
-
-        if(originAcc.isPresent() && destinyAcc.isPresent()){
-            if(originAcc.get().getBalance() >= amount){
-                originAcc.get().setBalance(originAcc.get().getBalance() - amount);
-                destinyAcc.get().setBalance(destinyAcc.get().getBalance() + amount);
-                accountRepo.save(originAcc.get());
-                accountRepo.save(destinyAcc.get());
-            }else{
-                throw new InsufficientBalanceException("The origin account does not have sufficient balance to cover the operation.");
-            }
-        }else{
-            throw new OriginOrDestinyNotFoundException("One of the accounts involved in the operation is not available.");
-        }
     }
 
 //? Métodos de Soporte. Limitada a la capa SERVICE, sin contacto con los Controllers.
@@ -121,7 +99,7 @@ public class ImplAccountService implements AccountService {
         account.setLastModifyDate(LocalDateTime.now());
         account.addType(idAT);
         account.addCurrency(idC);
-        if(idU != 0){
+        if(accountRepo.existsByUserIdU(idU)){
             account.addUser(idU);
         }
     return account;
@@ -169,6 +147,33 @@ public class ImplAccountService implements AccountService {
                     .collect(Collectors.joining("."));// Toma la palabra y lo junta al string (alias)
         } while (accountRepo.existsByAlias(alias));
     return alias;
+    }
+
+    
+//? Método encargado de la actualización de montos durante una operación 'Transference'.
+//! En caso de no pasar el primer if, 'OriginOrDestinyNotFoundException' forzara una excepción.
+//! En caso de no pasar el segundo if, 'InsufficientBalanceException' forzara una excepción.
+//!! En ambos casos, trabajaran conjunto al ServiceExceptionHandler para llevar una respuestas ...
+//!! ... declarativas hacia afuera de la api,tomando un 'atajo' fuera de ella.
+    @Override
+    public void updateAmounts(Long idO, Long idD,float amount){
+        Optional<Account> originAcc = accountRepo.findById(idO);
+        Optional<Account> destinyAcc = accountRepo.findById(idD);
+
+        if(originAcc.isPresent() && destinyAcc.isPresent()){
+            if(originAcc.get().getBalance() >= amount){
+                originAcc.get().setBalance(originAcc.get().getBalance() - amount);
+                destinyAcc.get().setBalance(destinyAcc.get().getBalance() + amount);
+//!             originAcc.get().setLastModifyDate(LocalDateTime.now()); Dato actualizado por trigger.
+//!             destinyAcc.get().setLastModifyDate(LocalDateTime.now()); Dato actualizado por trigger.
+                accountRepo.save(originAcc.get());
+                accountRepo.save(destinyAcc.get());
+            }else{
+                throw new InsufficientBalanceException("The origin account does not have sufficient balance to cover the operation.");
+            }
+        }else{
+            throw new OriginOrDestinyNotFoundException("One of the accounts involved in the operation is not available.");
+        }
     }
 }
 

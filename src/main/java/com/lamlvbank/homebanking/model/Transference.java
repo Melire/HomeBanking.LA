@@ -1,10 +1,11 @@
 package com.lamlvbank.homebanking.model;
 
-import org.hibernate.validator.constraints.Length;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
 import lombok.*;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,6 +27,9 @@ public class Transference{
     @NotNull @DecimalMin("1.0") @DecimalMax("1000000.0")
     @Column(nullable = false)
     private float amount;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    private LocalDateTime creationDate;
 
     @ManyToOne
     @JsonIgnoreProperties("transferences")

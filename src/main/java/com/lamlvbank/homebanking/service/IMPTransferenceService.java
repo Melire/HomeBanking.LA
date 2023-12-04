@@ -6,6 +6,7 @@ import com.lamlvbank.homebanking.repository.TransferenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -40,6 +41,7 @@ public class IMPTransferenceService implements TransferenceService{
     public Transference save(Transference transference) {
         accServ.updateAmounts(transference.getOrigin().getIdA(), transference.getDestiny().getIdA()
                             ,transference.getAmount());
+        transference.setCreationDate(LocalDateTime.now());                    
         return tR.save(transference);
     }
 
@@ -51,6 +53,7 @@ public class IMPTransferenceService implements TransferenceService{
             transference.setAmount(dto.getAmount());
             transference.addOriginAcc(dto.getIdO());
             transference.addDestinyAcc(dto.getIdD());
+            transference.setCreationDate(LocalDateTime.now());
             accServ.updateAmounts(dto.getIdO(), dto.getIdD(), dto.getAmount());
         return tR.save(transference);
     }
