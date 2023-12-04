@@ -52,11 +52,6 @@ public class IMPUserService implements UserService {
     return userTR.save(user);
     }
 
-    /*
-     * generar usuario (ser recibe por parámetro)
-     * generar cuenta
-     * indexar ambas entidades (asociar cuenta con usuario y usuario con cuenta)
-     */
     @Override
     public User register(User user) {
         Account account = accSer.generateAccount(1L,1L,0L);

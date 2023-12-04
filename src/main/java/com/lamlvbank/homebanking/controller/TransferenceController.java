@@ -46,7 +46,7 @@ public class TransferenceController {
     @PostMapping
     ResponseEntity<Transference> save(@Valid @RequestBody Transference transference){
         Transference transferenceSaved = transferServ.save(transference);
-        if (transferenceSaved != null){
+        if (transferenceSaved.getIdTF() != null){
             return ResponseEntity.status(HttpStatus.CREATED).body(transferenceSaved);
         } else {
             return ResponseEntity.badRequest().build();

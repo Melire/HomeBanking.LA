@@ -30,9 +30,8 @@ public class ImplAccountService implements AccountService {
     @Override
     public List<Account> findAll() {
         List<Account> accounts = accountRepo.findAll();    
-        accounts.forEach(account -> account.setTransferences(
-            account.getTransferences().isEmpty() ? 
-                tR.findAllByDestinyIdA(account.getIdA()) : account.getTransferences()));   
+        accounts.forEach(account -> account.getTransferences()
+                        .addAll(tR.findAllByDestinyIdA(account.getIdA())));
         return accounts;
     }
 
@@ -81,7 +80,7 @@ public class ImplAccountService implements AccountService {
             accountToUpdate.get().setBalance(account.getBalance());
             accountToUpdate.get().setLastModifyDate(LocalDateTime.now());
             Account accountUpdated = accountRepo.save(accountToUpdate.get());
-            return accountUpdated;
+        return accountUpdated;
         }
     return account;
     }
@@ -109,7 +108,6 @@ public class ImplAccountService implements AccountService {
             throw new OriginOrDestinyNotFoundException("One of the accounts involved in the operation is not available.");
         }
     }
-
 
 //? Métodos de Soporte. Limitada a la capa SERVICE, sin contacto con los Controllers.
     @Override
@@ -160,7 +158,7 @@ public class ImplAccountService implements AccountService {
                 "delicadeza", "energia", "dos", "vena", "camaleon", "atrevida", "condenacion", "libro",
                 "mago", "recepcion", "luchar", "cashbox", "atornillar", "desafio", "volar",
                 "juego", "sadden", "incompetente", "desprendible", "deporte", "beneficioso",
-                "corporacion" };
+                "corporacion"};
         String alias = null;
         Random random = new Random();
 
@@ -170,7 +168,7 @@ public class ImplAccountService implements AccountService {
                                                                           // reccorido
                     .collect(Collectors.joining("."));// Toma la palabra y lo junta al string (alias)
         } while (accountRepo.existsByAlias(alias));
-        return alias;
+    return alias;
     }
 }
 
