@@ -6,6 +6,9 @@ import com.lamlvbank.homebanking.repository.AccountRepository;
 import com.lamlvbank.homebanking.repository.TransferenceRepository;
 import com.lamlvbank.homebanking.tool.exception.*;
 
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,9 @@ public class ImplAccountService implements AccountService {
 
     @Autowired
     private TransferenceRepository tR;
+
+    @Autowired
+    private EntityManager em;
 
 //? Utilizamos lambda para poder rellenar las transferencias de aquellas cuentas que son 'DESTINY'.  
 //? Ya que la relación establecida en 'Transference' mapea a una sola propiedad('ORIGIN').
@@ -65,14 +71,17 @@ public class ImplAccountService implements AccountService {
 
 //! Disponible solo para cambiar atributo 'alias'.    
     @Override
+    @Transactional
     public Account update(Account account) {
         Optional<Account> accountToUpdate = accountRepo.findByAccountNAndCbu(account.getAccountN()
                                                                             ,account.getCbu());
         if (accountToUpdate.isPresent()) {
             accountToUpdate.get().setAlias(account.getAlias());
-            //! accountToUpdate.get().setLastModifyDate(LocalDateTime.now()); Dato actualizado por trigger.
+//!         accountToUpdate.get().setLastModifyDate(LocalDateTime.now()); Dato actualizado por trigger.
             accountRepo.save(accountToUpdate.get());
-        return accountRepo.findByAccountNAndCbu(account.getAccountN(),account.getCbu()).orElseThrow();
+            accountToUpdate = accountRepo.findByAccountNAndCbu(account.getAccountN(),account.getCbu());
+            em.refresh(accountToUpdate.orElseThrow());
+        return accountToUpdate.orElseThrow();
         }
     return account;
     }

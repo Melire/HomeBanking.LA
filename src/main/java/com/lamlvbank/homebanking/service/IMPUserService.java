@@ -4,10 +4,13 @@ import com.lamlvbank.homebanking.model.Account;
 import com.lamlvbank.homebanking.model.User;
 import com.lamlvbank.homebanking.repository.UserRepository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +20,9 @@ public class IMPUserService implements UserService {
     private UserRepository userTR;
     private AccountService accSer;
     private PasswordEncoder passEnc;
+
+    @Autowired
+    private EntityManager em;
 
     public IMPUserService(UserRepository userRep, AccountService accSer) {
         this.userTR = userRep;
@@ -62,22 +68,28 @@ public class IMPUserService implements UserService {
     }
 
     @Override
+    @Transactional
     public User update(User user) {
         Optional<User> userToUpdate = userTR.findByDni(user.getDni());
-        if (userToUpdate.isPresent()) {
-            userToUpdate.get().setName(user.getName());
-            userToUpdate.get().setSurname(user.getSurname());
-            // userToUpdate.get().setPassword(user.getPassword());
-            userToUpdate.get().setPassword(this.passEnc.encode(user.getPassword()));
-            userToUpdate.get().setBirthdate((user.getBirthdate()!=null)?
+        if (userToUpdate.isPresent()){
+            userToUpdate.get().setName((user.getName() != null)?
+                user.getName() : userToUpdate.get().getName());
+            userToUpdate.get().setSurname((user.getSurname() != null)?
+                user.getSurname() : userToUpdate.get().getSurname());
+            userToUpdate.get().setPassword(
+                (passEnc.matches(user.getPassword(),userToUpdate.get().getPassword())) ?
+                    passEnc.encode(user.getPassword()) : userToUpdate.get().getPassword()
+                    );
+            userToUpdate.get().setBirthdate((user.getBirthdate() != null)?
                                 user.getBirthdate() : userToUpdate.get().getBirthdate());
-            // userToUpdate.get().setLastModifyDate(LocalDateTime.now());
-            userTR.save(userToUpdate.get());
+//!         userToUpdate.get().setLastModifyDate(LocalDateTime.now());  Dato actualizado por trigger.
 
-            // return userUpdated;
-            return userTR.findByDni(user.getDni()).get();
+           userTR.save(userToUpdate.get());
+           userToUpdate = userTR.findByDni(user.getDni());
+           em.refresh(userToUpdate.get());
+        return userToUpdate.orElseThrow();
         }
-        return user;
+    return user;
     }
 
     @Override
