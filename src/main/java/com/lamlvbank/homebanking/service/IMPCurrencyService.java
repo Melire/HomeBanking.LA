@@ -10,9 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class IMPCurrencyService implements CurrencyService{
+public class IMPCurrencyService implements CurrencyService {
     @Autowired
     private CurrencyRepository cr;
+
     @Override
     public List<Currency> findAll() {
         return cr.findAll();
@@ -23,36 +24,30 @@ public class IMPCurrencyService implements CurrencyService{
         return cr.findById(idC);
     }
 
-    /* @Override
-    public Currency save(Currency currency) {
-        return cr.save(currency);
-    } */
-
     @Override
     public Currency save(Currency currency) {
-        if (cr.existsByName(currency.getName())){
-            return null;
+        if (cr.existsByName(currency.getName())) {
+            return currency;
         }
         currency.setCreationDate(LocalDateTime.now());
-        return cr.save(currency);
+    return cr.save(currency);
     }
 
     @Override
-     public Currency update(Currency currency) {
-         if (cr.existsById(currency.getIdC())){
-             return cr.save (currency);
-         }
-         currency.setIdC(0L);
-         return currency;
+    public Currency update(Currency currency) {
+        if (cr.existsById(currency.getIdC())) {
+            return cr.save(currency);
+        }
+        currency.setIdC(0L);
+    return currency;
+    }
 
-     }
-   @Override
-   public boolean deleteById(Long idC) {
-       if(cr.existsById(idC)){
-           cr.deleteById(idC);
-           return true;
-       }
-       return false;
-   }
+    @Override
+    public boolean deleteById(Long idC) {
+        if (cr.existsById(idC)) {
+            cr.deleteById(idC);
+            return true;
+        }
+        return false;
+    }
 }
-

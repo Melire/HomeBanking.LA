@@ -1,6 +1,5 @@
 package com.lamlvbank.homebanking.controller;
 
-
 import com.lamlvbank.homebanking.model.Currency;
 import com.lamlvbank.homebanking.service.CurrencyService;
 import jakarta.validation.Valid;
@@ -37,24 +36,25 @@ public class CurrencyController {
     @PostMapping
     ResponseEntity<Currency> save(@Valid @RequestBody Currency currency) {
         Currency currencySaved = cs.save(currency);
-        if (currencySaved != null) {
+        if (currencySaved.getIdC() != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(currencySaved);
         } else {
             return ResponseEntity.badRequest().build();
         }
-
     }
-    @PutMapping ("/{idC}")
-    ResponseEntity<Currency> update(@Valid @RequestBody Currency currency
-                                        ,@PathVariable("idC") Long idC) {
-        currency.setIdC(idC);
-        Currency currencyUpdated = cs.update(currency);
-        if (currencyUpdated.getIdC()!=0) {
-            return ResponseEntity.ok().body(currencyUpdated);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
-}
+    
+//! Se comento 'update' ya que no corresponde a la lógica de negocio de nuestra API.     
+    // @PutMapping ("/{idC}")
+    // ResponseEntity<Currency> update(@Valid @RequestBody Currency currency
+    //                                     ,@PathVariable("idC") Long idC) {
+    //     currency.setIdC(idC);
+    //     Currency currencyUpdated = cs.update(currency);
+    //     if (currencyUpdated.getIdC()!=0) {
+    //         return ResponseEntity.ok().body(currencyUpdated);
+    //     } else {
+    //         return ResponseEntity.badRequest().build();
+    //     }
+    // }
 
     @DeleteMapping ("/{idC}")
     ResponseEntity<?> deleteById (@PathVariable("idC") Long idC){

@@ -1,17 +1,18 @@
 package com.lamlvbank.homebanking.model;
-import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 @Entity
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idA")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +30,9 @@ public class Account {
     @Column(unique = true, nullable = false)
     private String cbu;
 
+//? '@Patter' se usa para definir un patron o forma especifica en la que se compone el String
+//? Utiliza expresiones regulares para lograrlo(regexp),para este caso,toma 3 fundamentos:
+//?     *Son 3 palabras.//Cada una de ellas solo en minúscula.//Separadas por un '.'
     @NotNull
     @NotBlank
     @Pattern(regexp = "^[a-z]+\\.[a-z]+\\.[a-z]+$", message = "Debe ser 3 palabras en minúsculas separadas por puntos")
@@ -40,34 +44,54 @@ public class Account {
     @DecimalMax(value = "20000000.0")
     private float balance;
 
-    // Agregue LocalDateTime Fecha de creacion y fecha de modificacion //ImplAccount
-    @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime createDT;
+//? 'creationDate' y 'lastModifyDate' entran en juego para registrar los cambios de la entidad.
+//? '@JsonFormat' declara un patron/formato para recuperar los datos de la BDD.
+    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    private LocalDateTime creationDate;
 
-    @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime lastModifyDT;
+    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    private LocalDateTime lastModifyDate;
 
-    // Implementacion de AccountType y de Currency
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties("account")
+    @JsonIgnoreProperties("accounts")
     private AccountType accountType;
 
-    @ManyToOne
-    @JsonIgnoreProperties("account")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("accounts")
     private Currency currency;
 
-    // Metodos para indexar (conectar a nivel Jpa) entidades
-    public void addType(Long idAT) {
-        AccountType accType = new AccountType();
-        accType.setIdAT(idAT);
-        this.setAccountType(accType);
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("accounts")
+    private User user;
+
+    @OneToMany(mappedBy = "origin", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("account")
+    private List<Transaction> transactions;
+
+    @OneToMany(mappedBy = "origin", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("account")
+    private List<Transference> transferences;
+
+    public Account() {
+        this.transactions = new ArrayList<>();
+        this.transferences = new ArrayList<>();
     }
 
     public void addCurrency(Long idC) {
         Currency currency = new Currency();
         currency.setIdC(idC);
         this.setCurrency(currency);
+    }
+
+    public void addType(Long idAT) {
+        AccountType accType = new AccountType();
+        accType.setIdAT(idAT);
+        this.setAccountType(accType);
+    }
+
+    public void addUser(Long idU) {
+        User userAdd = new User();
+        userAdd.setIdU(idU);
+        this.setUser(userAdd);
     }
 }

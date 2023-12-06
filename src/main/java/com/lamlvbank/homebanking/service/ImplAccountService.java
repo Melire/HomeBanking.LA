@@ -4,73 +4,92 @@ import com.lamlvbank.homebanking.mappers.AccountMapper;
 import com.lamlvbank.homebanking.model.Account;
 import com.lamlvbank.homebanking.model.dto.AccountDTO;
 import com.lamlvbank.homebanking.repository.AccountRepository;
+import com.lamlvbank.homebanking.repository.TransferenceRepository;
+import com.lamlvbank.homebanking.tool.exception.*;
+
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
 public class ImplAccountService implements AccountService {
-
-    // Inyeccion de dependencia del Repo
+    // ? Mediante Inyección de dependencia declaramos un Repository,...
+    // ? ... manteniendo un bajo acoplamiento y cohesion.
     @Autowired
     private AccountRepository accountRepo;
 
-    /*
-     * !Metodos viejos
-     * 
-     * @Override
-     * public List<Account> findAll() {
-     * return accountRepo.findAll();
-     * }
-     * 
-     * @Override
-     * public Optional<Account> findById(Long idA) {
-     * return accountRepo.findById(idA);
-     * }
-     */
+    @Autowired
+    private TransferenceRepository tR;
+
+    @Autowired
+    private EntityManager em;
+
+    // ? Utilizamos lambda para poder rellenar las transferencias de aquellas cuentas que son 'DESTINY'.
+    // ? Ya que la relación establecida en 'Transference' mapea a una sola propiedad('ORIGIN').
     @Override
-    public List<AccountDTO> findAll() {
-        List<Account> account = accountRepo.findAll();
-        return account.stream().map(AccountMapper::accountToDto)
-                .collect(Collectors.toList());
+    public List<Account> findAll() {
+        List<Account> accounts = accountRepo.findAll();
+        accounts.forEach(account -> account.getTransferences()
+                .addAll(tR.findAllByDestinyIdA(account.getIdA())));
+        return accounts;
     }
 
     @Override
-    public Optional<AccountDTO> findById(Long idA) {
-        Optional<Account> optAccount = accountRepo.findById(idA);
-
-        return Optional.of(AccountMapper.accountToDto(optAccount.get()));
-
+    public Optional<Account> findById(Long idA) {
+        return accountRepo.findById(idA);
     }
-    // linea 57 Setee la fecha y hora actual en la que se creo la cuenta
 
     @Override
     public Account save(Account account) {
-        if (!(accountRepo.existsByAccountN(account.getAccountN())) && !(accountRepo.existsByAlias(account.getAlias()))
+        if (!(accountRepo.existsByAccountN(account.getAccountN()))
+                && !(accountRepo.existsByAlias(account.getAlias()))
                 && !(accountRepo.existsByCbu(account.getCbu()))) {
-            account.setCreateDT(LocalDateTime.now());
-            account.setLastModifyDT(LocalDateTime.now());
+            account.setCreationDate(LocalDateTime.now());
+            account.setLastModifyDate(LocalDateTime.now());
             return accountRepo.save(account);
-        } else {
-            return null;
         }
+        return account;
+    }
+    
+   
+  
+    // ? Método dedicado a la apertura de una Cuenta nueva de un usuario existente.
+    // ? Toda la información de la cuenta es generada por los 'Métodos de Soporte'.
+    // ? A excepción de las relaciones con Entidades, se lleva a cabo mediante los 'add'.
+     // REGISTER
+    @Override
+    public Account openAccount(AccountDTO dto) {
+        Account account = generateAccount(dto.getIdAT(), dto.getIdC(), dto.getIdU());
+        if (account.getUser() != null) {
+            return accountRepo.save(account);
+        }
+        return account;
     }
 
-    // REGISTER
+    // ! Disponible solo para cambiar atributo 'alias'.
     @Override
-    public AccountDTO openAccount(AccountDTO dto) {
-        Account account = generateAccount();
-        account.addType(dto.getIdT());// Agregado de la rama de Meli
-        account.addCurrency(dto.getIdC());// Agregado de la rama de Pedro
-        dto = AccountMapper.accountToDto(accountRepo.save(account));
-        return dto;
+    @Transactional
+    public Account update(Account account) {
+        Optional<Account> accountToUpdate = accountRepo.findByAccountNAndCbu(account.getAccountN()
+                                                                            ,account.getCbu());
+        if (accountToUpdate.isPresent()) {
+            accountToUpdate.get().setAlias(account.getAlias());
+//!         accountToUpdate.get().setLastModifyDate(LocalDateTime.now()); Dato actualizado por trigger.
+            accountRepo.save(accountToUpdate.get());
+            accountToUpdate = accountRepo.findByAccountNAndCbu(account.getAccountN(),account.getCbu());
+            em.refresh(accountToUpdate.orElseThrow());
+        return accountToUpdate.orElseThrow();
+        }
+    return account;
     }
+
 
     @Override
     public boolean deleteById(Long idA) {
@@ -80,34 +99,27 @@ public class ImplAccountService implements AccountService {
         }
         return false;
     }
-
+//? Métodos de Soporte. Limitada a la capa SERVICE, sin contacto con los Controllers.
     @Override
-    public Account update(Account account) {
-        Optional<Account> accountToUpdate = accountRepo.findByAccountN(account.getAccountN());
-        if (accountToUpdate.isPresent()) {
-            accountToUpdate.get().setAlias(account.getAlias());
-            accountToUpdate.get().setBalance(account.getBalance());
-            accountToUpdate.get().setLastModifyDT(LocalDateTime.now());// guarda la fecha y hora actual de modificación
-            Account accountUpdated = accountRepo.save(accountToUpdate.get());
-            return accountUpdated;
-        }
-        return account;
-    }
-    // Validar que el cbu y al numero de cuenta pertenezca a la misma entidad
-
-    @Override
-    public Account generateAccount() {
+    public Account generateAccount(Long idAT, Long idC, Long idU) {
         Account account = new Account();
         account.setAccountN(genAccNumber());
         account.setCbu(genCBU());
         account.setAlias(genAlias());
         account.setBalance(0f);
-        account.setCreateDT(LocalDateTime.now());
-        account.setLastModifyDT(LocalDateTime.now());
+        account.setCreationDate(LocalDateTime.now());
+        account.setLastModifyDate(LocalDateTime.now());
+        account.addType(idAT);
+        account.addCurrency(idC);
+        if (accountRepo.existsByUserIdU(idU)) {
+            account.addUser(idU);
+        }
         return account;
     }
 
-    // Genera numero random para el accountN
+    // ! Los generadores jamas soltaran un valor que ya este almacenado en la BDD,
+    // son ÚNICOS.
+    // ? Generador de Numero de Cuenta RANDOM.
     private String genAccNumber() {
         Long accNumberAux = 0L;
         Random random = new Random();
@@ -119,6 +131,7 @@ public class ImplAccountService implements AccountService {
         return accNumber;
     }
 
+    // ? Generador de CBU RANDOM.
     private String genCBU() {
         Long accCBUAux = 0L;
         Random random = new Random();
@@ -130,6 +143,7 @@ public class ImplAccountService implements AccountService {
         return accCBU;
     }
 
+    // ? Generador de Alias RANDOM.
     private String genAlias() {
         String[] words = { "gadget", "mecanico", "tio", "chucheria", "densa", "opinar", "amigos", "cosmetico",
                 "delicadeza", "energia", "dos", "vena", "camaleon", "atrevida", "condenacion", "libro",
@@ -146,5 +160,33 @@ public class ImplAccountService implements AccountService {
                     .collect(Collectors.joining("."));// Toma la palabra y lo junta al string (alias)
         } while (accountRepo.existsByAlias(alias));
         return alias;
+    }
+
+    // ? Método encargado de la actualización de montos durante una operación 'Transference'.
+    // ! En caso de no pasar el primer if, 'OriginOrDestinyNotFoundException' forzara una excepción.
+    // ! En caso de no pasar el segundo if, 'InsufficientBalanceException' forzara una excepción.
+    // !! En ambos casos, trabajaran conjunto al ServiceExceptionHandler para llevar una respuestas ...
+    // !! ... declarativas hacia afuera de la api,tomando un 'atajo' fuera de ella.
+    @Override
+    public void updateAmounts(Long idO, Long idD,float amount){
+        Optional<Account> originAcc = accountRepo.findById(idO);
+        Optional<Account> destinyAcc = accountRepo.findById(idD);
+
+        if(originAcc.isPresent() && destinyAcc.isPresent()){
+            if(originAcc.get().getBalance() >= amount){
+                originAcc.get().setBalance(originAcc.get().getBalance() - amount);
+                destinyAcc.get().setBalance(destinyAcc.get().getBalance() + amount);
+//!             originAcc.get().setLastModifyDate(LocalDateTime.now()); Dato actualizado por trigger.
+//!             destinyAcc.get().setLastModifyDate(LocalDateTime.now()); Dato actualizado por trigger.
+                accountRepo.save(originAcc.get());
+                accountRepo.save(destinyAcc.get());
+            }else{
+                throw new InsufficientBalanceException("The origin account does not have sufficient balance to cover the operation.");
+            }
+        }else{
+            throw new OriginOrDestinyNotFoundException("One of the accounts involved in the operation is not available.");
+
+        }
+    
     }
 }

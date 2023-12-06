@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class IMPAccountTypeService implements AccountTypeService {
     @Autowired
@@ -26,21 +27,22 @@ public class IMPAccountTypeService implements AccountTypeService {
     @Override
     public AccountType save(AccountType accType) {
         if (accTR.existsByName(accType.getName())){
-            return null;
+            return accType;
         }
         accType.setCreationDate(LocalDateTime.now());
         return accTR.save(accType);
     }
     
-    @Override
+   /*  @Override
     public AccountType update(AccountType accType) {
         if (accTR.existsById(accType.getIdAT())){
             return accTR.save(accType);
         }
         accType.setIdAT(0L);
         return accType;
-    }
-
+    } */
+    
+   
     @Override
     public boolean deleteById(Long idAt) {
         if(accTR.existsById(idAt)){

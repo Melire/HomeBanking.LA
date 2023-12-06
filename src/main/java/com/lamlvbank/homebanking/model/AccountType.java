@@ -12,7 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idAT")
 public class AccountType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +21,8 @@ public class AccountType {
     @NotBlank
     @Size(min = 8, max = 40)
     @Column(unique = true, nullable = false)
-    @Pattern(regexp = "^Account\\s([A-Za-z]+)$", message = "Patron erroneo, debe ser Account [Palabra]")
-    // @Length(min=8, max=40) combina @Notblank y @Size
+    @Pattern(regexp = "^Account\\s([A-Za-z]+)$", message = "Patron erróneo, debe ser Account [Palabra]")
+    //@Length(min=8, max=40) combina @Notblank y @Size
     private String name;
 
     @Column(nullable = false)
@@ -31,7 +30,6 @@ public class AccountType {
     private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "accountType")
-    @JsonIgnoreProperties({"accountType","account"}) 
-    private List<Account> account;
-
+    @JsonIgnoreProperties("accountType")
+    private List<Account> accounts;
 }

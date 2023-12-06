@@ -35,7 +35,7 @@ public class AccountTypeController {
     @PostMapping
     ResponseEntity<AccountType> save(@Valid @RequestBody AccountType accountType) {
         AccountType accTypeSaved = aTS.save(accountType);
-        if (accTypeSaved!= null) {
+        if (accTypeSaved.getIdAT()!= null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(accTypeSaved);
         } else {
             return ResponseEntity.badRequest().build();
@@ -43,17 +43,18 @@ public class AccountTypeController {
 
     }
 
-    @PutMapping ("/{idAT}")
-    ResponseEntity<AccountType> update(@Valid @RequestBody AccountType accountType
-                                        ,@PathVariable("idAT") Long idAT) {
-        accountType.setIdAT(idAT);
-        AccountType accTypeUpdated = aTS.update(accountType);
-        if (accTypeUpdated.getIdAT()!=0) {
-            return ResponseEntity.ok().body(accTypeUpdated);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
-    }
+//! Se comento 'update' ya que no corresponde a la lógica de negocio de nuestra API.    
+    // @PutMapping ("/{idAT}")
+    // ResponseEntity<AccountType> update(@Valid @RequestBody AccountType accountType
+    //                                     ,@PathVariable("idAT") Long idAT) {
+    //     accountType.setIdAT(idAT);
+    //     AccountType accTypeUpdated = aTS.update(accountType);
+    //     if (accTypeUpdated.getIdAT()!=0) {
+    //         return ResponseEntity.ok().body(accTypeUpdated);
+    //     } else {
+    //         return ResponseEntity.badRequest().build();
+    //     }
+    // }
 
     @DeleteMapping ("/{idAT}")
     ResponseEntity<?> deleteById (@PathVariable("idAT") Long idAT){
