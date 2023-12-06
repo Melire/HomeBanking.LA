@@ -16,7 +16,7 @@ public class AccountMapper {
         dto.setCbu(account.getCbu());
         dto.setAlias(account.getAlias());
         dto.setBalance(account.getBalance());
-        dto.setIdT(account.getAccountType().getIdAT());
+        dto.setIdAT(account.getAccountType().getIdAT());
         dto.setIdC(account.getCurrency().getIdC());
 
         return dto;
@@ -30,7 +30,7 @@ public class AccountMapper {
         account.setCbu(dto.getCbu());
         account.setAlias(dto.getAlias());
         account.setBalance(dto.getBalance());
-        account.addType(dto.getIdT());
+        account.addType(dto.getIdAT());
         account.addCurrency(dto.getIdC());
         /*
          * SE MODIFICA CUANDO UNAMOS LAS BRANCH CON TODOS
