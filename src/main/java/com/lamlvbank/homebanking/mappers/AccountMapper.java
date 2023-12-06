@@ -2,7 +2,7 @@ package com.lamlvbank.homebanking.mappers;
 
 import com.lamlvbank.homebanking.model.Account;
 
-import com.lamlvbank.homebanking.model.dtos.AccountDto;
+import com.lamlvbank.homebanking.model.dto.AccountDTO;
 
 import lombok.experimental.UtilityClass;
 
@@ -10,8 +10,8 @@ import lombok.experimental.UtilityClass;
 public class AccountMapper {
 
     // Metodo para pasar de Account a Dto
-    public AccountDto accountToDto(Account account) {
-        AccountDto dto = new AccountDto();
+    public AccountDTO accountToDto(Account account) {
+        AccountDTO dto = new AccountDTO();
         dto.setAccountN(account.getAccountN());
         dto.setCbu(account.getCbu());
         dto.setAlias(account.getAlias());
@@ -24,7 +24,7 @@ public class AccountMapper {
     }
 
     // Metodo para pasar de Dto a Account
-    public Account dtoToAccount(AccountDto dto) {
+    public Account dtoToAccount(AccountDTO dto) {
         Account account = new Account();
         account.setAccountN(dto.getAccountN());
         account.setCbu(dto.getCbu());

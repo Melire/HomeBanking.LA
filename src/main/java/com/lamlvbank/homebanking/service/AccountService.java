@@ -1,7 +1,7 @@
 package com.lamlvbank.homebanking.service;
 
 import com.lamlvbank.homebanking.model.Account;
-import com.lamlvbank.homebanking.model.dtos.AccountDto;
+import com.lamlvbank.homebanking.model.dto.AccountDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,15 +12,15 @@ public interface AccountService {
 
     /* public List<Account> findAll(); */
 
-    public List<AccountDto> findAll();
+    public List<AccountDTO> findAll();
 
     /* public Optional<Account> findById(Long idA); */
 
-    public Optional<AccountDto> findById(Long idA);
+    public Optional<AccountDTO> findById(Long idA);
 
     public Account save(Account account);
 
-    public AccountDto openAccount(AccountDto dto);
+    public AccountDTO openAccount(AccountDTO dto);
 
     public boolean deleteById(Long idA);
 

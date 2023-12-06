@@ -1,7 +1,7 @@
 package com.lamlvbank.homebanking.controller;
 
 import com.lamlvbank.homebanking.model.Account;
-import com.lamlvbank.homebanking.model.dtos.AccountDto;
+import com.lamlvbank.homebanking.model.dto.AccountDTO;
 import com.lamlvbank.homebanking.service.AccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +24,14 @@ public class AccountController {
      */
     // FIND ALL ACCOUNTS
     @GetMapping
-    ResponseEntity<List<AccountDto>> findAll() {
+    ResponseEntity<List<AccountDTO>> findAll() {
         return ResponseEntity.ok().body(accountServ.findAll());
     }
 
     // FIND ACCOUNT BY ID
     @GetMapping("/{idA}")
-    ResponseEntity<AccountDto> findById(@PathVariable("idA") Long idA) {
-        Optional<AccountDto> optAccount = accountServ.findById(idA);
+    ResponseEntity<AccountDTO> findById(@PathVariable("idA") Long idA) {
+        Optional<AccountDTO> optAccount = accountServ.findById(idA);
         if (optAccount.isPresent()) {
             return ResponseEntity.ok().body(optAccount.get());
         } else {
@@ -55,8 +55,8 @@ public class AccountController {
 
     // REGISTER ACCOUNT
     @PostMapping("/new")
-    ResponseEntity<AccountDto> openAccount(@Valid @RequestBody AccountDto dto) {
-        AccountDto accSaved = accountServ.openAccount(dto);
+    ResponseEntity<AccountDTO> openAccount(@Valid @RequestBody AccountDTO dto) {
+        AccountDTO accSaved = accountServ.openAccount(dto);
         if (accSaved != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(accSaved);
         } else {

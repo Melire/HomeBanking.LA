@@ -2,7 +2,7 @@ package com.lamlvbank.homebanking.service;
 
 import com.lamlvbank.homebanking.mappers.AccountMapper;
 import com.lamlvbank.homebanking.model.Account;
-import com.lamlvbank.homebanking.model.dtos.AccountDto;
+import com.lamlvbank.homebanking.model.dto.AccountDTO;
 import com.lamlvbank.homebanking.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,14 +35,14 @@ public class ImplAccountService implements AccountService {
      * }
      */
     @Override
-    public List<AccountDto> findAll() {
+    public List<AccountDTO> findAll() {
         List<Account> account = accountRepo.findAll();
         return account.stream().map(AccountMapper::accountToDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<AccountDto> findById(Long idA) {
+    public Optional<AccountDTO> findById(Long idA) {
         Optional<Account> optAccount = accountRepo.findById(idA);
 
         return Optional.of(AccountMapper.accountToDto(optAccount.get()));
@@ -64,7 +64,7 @@ public class ImplAccountService implements AccountService {
 
     // REGISTER
     @Override
-    public AccountDto openAccount(AccountDto dto) {
+    public AccountDTO openAccount(AccountDTO dto) {
         Account account = generateAccount();
         account.addType(dto.getIdT());// Agregado de la rama de Meli
         account.addCurrency(dto.getIdC());// Agregado de la rama de Pedro

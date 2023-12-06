@@ -1,5 +1,5 @@
 
-package com.lamlvbank.homebanking.model.dtos;
+package com.lamlvbank.homebanking.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder // Se aplica funcionalidad de patron de diseño
-public class AccountDto {
+public class AccountDTO {
     private String accountN;
     private String cbu;
     private String alias;
