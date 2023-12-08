@@ -62,6 +62,8 @@ public class IMPUserService implements UserService {
     public User register(User user) {
         Account account = accSer.generateAccount(1L,1L,0L);
         user.setPassword(passEnc.encode(user.getPassword()));
+        user.setCreationDate(LocalDateTime.now());
+        user.setLastModifyDate(LocalDateTime.now());
         account.setUser(user);
         user.getAccounts().add(account);
     return userTR.save(user);
